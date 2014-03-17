@@ -1,5 +1,6 @@
 [extensions]
 hgext.extdiff=
+color=
 [extdiff]
 cmd.vimdiff= vim
 opts.vimdiff= -d $parent $child
