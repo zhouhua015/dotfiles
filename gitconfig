@@ -1,0 +1,17 @@
+[alias]
+    co = checkout
+    ci = commit
+    st = status
+    br = branch
+    hist = log --pretty=format:\"%h %ad | [%an] %s%d\" --graph --date=short
+    nedf = diff --no-ext-diff
+    type = cat-file -t
+    dump = cat-file -p
+
+[diff]
+    external = git_diff_wrapper
+
+[pager]
+    diff = 
+[core]
+	editor = vim
