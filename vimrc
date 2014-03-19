@@ -4,32 +4,31 @@ filetype off                  " required
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
-" " alternatively, pass a path where Vundle should install bundles
-" "let path = '~/some/path/here'
-" "call vundle#rc(path)
+
+" alternatively, pass a path where Vundle should install bundles
+"let path = '~/some/path/here'
+"call vundle#rc(path)
 
 " let Vundle manage Vundle, required
 Bundle 'gmarik/vundle'
 
-" " The following are examples of different formats supported.
-" " Keep bundle commands between here and filetype plugin indent on.
-" " scripts on GitHub repos
+"" The following are examples of different formats supported.
+"" Keep bundle commands between here and filetype plugin indent on.
+"" scripts on GitHub repos
 " Bundle 'tpope/vim-fugitive'
 " Bundle 'Lokaltog/vim-easymotion'
 " Bundle 'tpope/vim-rails.git'
-" " The sparkup vim script is in a subdirectory of this repo called vim.
-" " Pass the path to set the runtimepath properly.
+"" The sparkup vim script is in a subdirectory of this repo called vim.
+"" Pass the path to set the runtimepath properly.
 " Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-" " scripts from http://vim-scripts.org/vim/scripts.html
+"" scripts from http://vim-scripts.org/vim/scripts.html
 " Bundle 'L9'
 " Bundle 'FuzzyFinder'
-" " scripts not on GitHub
+"" scripts not on GitHub
 " Bundle 'git://git.wincent.com/command-t.git'
-" " git repos on your local machine (i.e. when working on your own plugin)
+"" git repos on your local machine (i.e. when working on your own plugin)
 " Bundle 'file:///home/gmarik/path/to/plugin'
-" " ...
 
-Bundle 
 Bundle 'bufexplorer.zip'
 Bundle 'closetag.vim'
 Bundle 'matchit.zip'
