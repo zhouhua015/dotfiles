@@ -14,7 +14,7 @@ fi
 
 
 OLDDIR=~/dotfiles_old
-DOTFILES="bashrc gvimrc vimrc vim svn.bashrc gitconfig tmux.conf hgrc gitignore_global"
+DOTFILES="bashrc gvimrc vimrc svn.bashrc gitconfig tmux.conf hgrc gitignore_global"
 
 echo "Creating $OLDDIR for backup of any existing dotfiles in ~"
 mkdir -p $OLDDIR
@@ -32,4 +32,5 @@ done
 
 if [ -f /usr/bin/git ]; then
     git config --global core.excludesfile ~/.gitignore_global
+    git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
 fi
