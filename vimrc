@@ -51,6 +51,7 @@ Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
 Bundle 'mattn/emmet-vim'
 
+Bundle 'zhouhua015/goref', {'rtp': 'vim/'}
 
 filetype plugin indent on     " required
 " To ignore plugin indent changes, instead use:
@@ -232,7 +233,7 @@ vnoremap <silent> # :call VisualSearch('b')<CR>
 
 " When you press gv you vimgrep after the selected text
 vnoremap <silent> gv :call VisualSearch('gv')<CR>
-map <leader>g :grep -o -R -P --include="*.cpp" "" .<left><left><left>
+map <leader>g :grep -o -R -P "" .<left><left><left>
 
 function! CmdLine(str)
     exe "menu Foo.Bar :" . a:str
@@ -251,7 +252,7 @@ function! VisualSearch(direction) range
     if a:direction == 'b'
         execute "normal ?" . l:pattern . "^M"
     elseif a:direction == 'gv'
-        call CmdLine("grep -o --include=\"*.cpp\" -R -P " . '"'. l:pattern . '"' . ' .')
+        call CmdLine("grep -o -R -P " . '"'. l:pattern . '"' . ' .')
     elseif a:direction == 'f'
         execute "normal /" . l:pattern . "^M"
     endif
