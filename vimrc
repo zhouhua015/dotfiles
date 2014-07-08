@@ -170,6 +170,11 @@ if has("gui_running")
     "set lines=75
     if has("win32") || has("win64")
         set gfn=Lucida\ Console:h10
+    elseif has("unix")
+        let s:uname = system("uname -s")
+        if s:uname == "Linux"
+            set gfn=Monospace:h10
+        endif
     else
         set gfn=Monaco:h12
     endif
