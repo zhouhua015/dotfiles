@@ -107,7 +107,7 @@ set foldlevel=99
 " set 7 lines to the cursors - when moving vertical
 set so=7
 set wildmenu
-set wildignore=*.o,*~,*.pyc
+set wildignore=*.o,*.a,*.so,*.jar,*.tar.*,*~,*.pyc
 set lazyredraw
 set magic
 set ruler "Always show current position
@@ -149,18 +149,11 @@ set tm=500
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set encoding=utf8
 
-" Syntax highlighting by default.
-"syntax on
-syntax enable
-
 set t_Co=256
 
-" The following 2 settings' order will effect the color scheme
-"colorscheme Tomorrow-Night-Eighties
-"set background=dark
-set background=dark
+syntax enable
+set background=light
 colorscheme solarized
-
 
 if has("gui_running")
     set guioptions-=T
@@ -347,9 +340,6 @@ map <leader>bd :Bclose<cr>
 " Avoid the bloody far <Esc>
 inoremap jk <Esc>
 inoremap kj <Esc>
-
-" Map the <Esc> to a nearer key under insert mode
-inoremap <c-[> <Esc>
 
 " Use the arrows switch among buffers
 map <right> :bn<cr>
@@ -545,19 +535,18 @@ map <silent> <F9> :TagbarToggle<cr>
 let g:ctrlp_map='<c-p>'
 let g:ctrlp_regexp = 1          " Use regexp search
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " These 2 options are not used when g:ctrlp_user_command defined
-
 "set wildignore+='*/.git/*,*/.hg/*,*/.svn/*'
 "let g:ctrlp_custom_ignore='\.git$\|\.hg$\|\.svn$\|\.o$'
 if !has("win32") && !has("win64")
-let g:ctrlp_user_command = {
-    \ 'types': {
-      \ 1: ['.git', 'cd %s && git ls-files'],
-      \ 2: ['.hg', 'hg --cwd %s locate -I .'],
-      \ },
-    \ 'fallback': 'find %s -type f ! -name "*.o" -a ! -name "*.a"'
-    \ }
+    let g:ctrlp_user_command = {
+                \ 'types': {
+                \ 1: ['.git', 'cd %s && git ls-files'],
+                \ 2: ['.hg', 'hg --cwd %s locate -I .'],
+                \ },
+                \ 'fallback': 'find %s -type f',
+                \ 'ignore': 1
+                \ }
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

@@ -17,7 +17,7 @@ NORM_COLOR=`tput sgr0`
 ;;
 esac
 
-# 该函数用于svn log的颜色显示
+# Colourful log
 slg() {
     env svn log $* |
     sed -e "/r[0-9]\+ /,/^------\+/{
@@ -29,7 +29,7 @@ slg() {
 ${PAGER:-less -QRS}
 }
 
-# 该函数用于svn diff的颜色显示
+# Colourful diff
 sdl() {
 env svn diff $* |
 sed -e "s/^+[^+].*/${ADD_COLOR}&${NORM_COLOR}/g" \
@@ -42,14 +42,14 @@ sed -e "s/^+[^+].*/${ADD_COLOR}&${NORM_COLOR}/g" \
 ${PAGER:-less -QRS}
 }
 
-# 该函数用于显示当前svn被修改的文件
+# Changed files
 sdlf() {
 env svn diff $* |
 grep "^--- " |
 sed -e "s/^[-+]\{3\}.*/${FILE_COLOR}&${FILE_COLOR}/g"
 }
 
-# 这里，用于自定义svn的子命令
+# Customized sub-command
 svn() {
 case "$1" in
 log)
