@@ -1,6 +1,6 @@
 source ~/.vimrc
 
-set background=light
+set background=dark
 colorscheme solarized
 
 " Fast reload the .vimrc

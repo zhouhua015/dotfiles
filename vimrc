@@ -49,6 +49,7 @@ Bundle 'Blackrush/vim-gocode'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
 Bundle 'mattn/emmet-vim'
+Bundle 'solarnz/thrift.vim'
 
 Bundle 'zhouhua015/goref', {'rtp': 'vim/'}
 
@@ -152,7 +153,7 @@ set encoding=utf8
 set t_Co=256
 
 syntax enable
-set background=light
+set background=dark
 colorscheme solarized
 
 if has("gui_running")
