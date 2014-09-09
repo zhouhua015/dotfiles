@@ -50,6 +50,8 @@ Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
 Bundle 'mattn/emmet-vim'
 Bundle 'solarnz/thrift.vim'
+Bundle 'Valloric/YouCompleteMe'
+Bundle 'scrooloose/syntastic'
 
 Bundle 'zhouhua015/goref', {'rtp': 'vim/'}
 
