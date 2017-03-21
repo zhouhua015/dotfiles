@@ -2,7 +2,7 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/vundle/
+set rtp+=~/.vim/bundle/Vundle.vim/
 call vundle#rc()
 
 " alternatively, pass a path where Vundle should install bundles
@@ -10,8 +10,7 @@ call vundle#rc()
 "call vundle#rc(path)
 
 " let Vundle manage Vundle, required
-Bundle 'gmarik/vundle'
-
+Plugin 'VundleVim/Vundle.vim'
 "" The following are examples of different formats supported.
 "" Keep bundle commands between here and filetype plugin indent on.
 "" scripts on GitHub repos
@@ -19,41 +18,37 @@ Bundle 'gmarik/vundle'
 " Bundle 'Lokaltog/vim-easymotion'
 " Bundle 'tpope/vim-rails.git'
 "" The sparkup vim script is in a subdirectory of this repo called vim.
-"" Pass the path to set the runtimepath properly.
-" Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-"" scripts from http://vim-scripts.org/vim/scripts.html
-" Bundle 'L9'
-" Bundle 'FuzzyFinder'
-"" scripts not on GitHub
-" Bundle 'git://git.wincent.com/command-t.git'
-"" git repos on your local machine (i.e. when working on your own plugin)
-" Bundle 'file:///home/gmarik/path/to/plugin'
-
-Bundle 'bufexplorer.zip'
-Bundle 'closetag.vim'
-Bundle 'matchit.zip'
+" "" Pass the path to set the runtimepath properly.
+" " Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+" "" scripts from http://vim-scripts.org/vim/scripts.html
+" " Bundle 'L9'
+" " Bundle 'FuzzyFinder'
+" "" scripts not on GitHub
+" " Bundle 'git://git.wincent.com/command-t.git'
+" "" git repos on your local machine (i.e. when working on your own plugin)
+" " Bundle 'file:///home/gmarik/path/to/plugin'
+"
+Plugin 'vim-scripts/bufexplorer.zip'
+Bundle 'vim-scrips/matchit.zip'
 Bundle 'kien/ctrlp.vim'
-Bundle 'mschinz/omnicppcomplete'
-Bundle 'kevinw/pyflakes-vim'
-Bundle 'garbas/vim-snipmate'
-Bundle 'tomtom/tlib_vim'
-Bundle 'MarcWeber/vim-addon-mw-utils'
 Bundle 'ervandew/supertab'
 Bundle 'majutsushi/tagbar'
 Bundle 'altercation/vim-colors-solarized'
+Plugin 'chriskempson/base16-vim'
 Bundle 'Lokaltog/vim-easymotion'
-Bundle 'sukima/xmledit'
 Bundle 'tpope/vim-fugitive'
-Bundle 'dgryski/vim-godef'
 Bundle 'tpope/vim-surround'
-Bundle 'tpope/vim-repeat'
 Bundle 'mattn/emmet-vim'
 Bundle 'solarnz/thrift.vim'
 Bundle 'Valloric/YouCompleteMe'
 Bundle 'scrooloose/syntastic'
 Bundle 'fatih/vim-go'
-
-Bundle 'zhouhua015/goref', {'rtp': 'vim/'}
+Plugin 'OmniSharp/Omnisharp-vim'
+Plugin 'tpope/vim-dispatch'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+"
+Bundle 'vim-scripts/visual_studio.vim'
 
 filetype plugin indent on     " required
 " To ignore plugin indent changes, instead use:
@@ -155,8 +150,9 @@ set encoding=utf8
 set t_Co=256
 
 syntax enable
-set background=dark
-colorscheme solarized
+" set background=dark
+" colorscheme solarized
+colorscheme base16-default-dark
 
 if has("gui_running")
     set guioptions-=T
@@ -219,9 +215,9 @@ set lbr "no new line before one word is finished
 " Set auto indent, smart indent, wrap lines
 set ai si wrap
 
-set textwidth=80
+set textwidth=100
 set formatoptions=qrn1  " Actually, I don't know the exactly meaning of this
-set colorcolumn=80      " Show a colored column at 80 characters 
+set colorcolumn=100      " Show a colored column at 80 characters 
 
 
 """"""""""""""""""""""""""""""
@@ -685,3 +681,40 @@ let g:go_fmt_fail_silently = 1
 " Fix lagging issue while saving
 let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+
+
+""""""""""""""""""""""""""""""""""""""
+" Ycm settings
+" """"""""""""""""""""""""""""""""""""""
+" Add goto for c/cpp files
+autocmd filetype c,cpp nnoremap <leader>gd :YcmCompleter GoTo<CR>
+autocmd filetype cs let g:ycm_autoclose_preview_window_after_completion=1
+
+
+""""""""""""""""""""""""""""""""""""""
+" ultisnips settings
+""""""""""""""""""""""""""""""""""""""
+" Trigger configuration
+let g:UltiSnipsExpandTrigger="<c-enter>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+
+
+""""""""""""""""""""""""""""""""""""""
+" c/cpp settings
+" """"""""""""""""""""""""""""""""""""""
+" Find corresponding header/source file
+function! SwitchSourceHeader()
+    "update!
+    if (expand ("%:e") == "cpp")
+        find %:t:r.h
+    else
+        find %:t:r.cpp
+    endif
+endfunction
+
+nmap ,s :call SwitchSourceHeader()<CR>
+
