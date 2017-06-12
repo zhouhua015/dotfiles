@@ -91,8 +91,8 @@ export PATH=$PATH:$M2
 
 # Fix the fucking color scheme problem while vim inside tmux
 alias tmux="TERM=screen-256color-bce tmux"
-source ~/.svnrc
-source ~/.tmuxinator.zsh
+# source ~/.svnrc
+# source ~/.tmuxinator.zsh
 
 export GOROOT=/usr/lib/go
 export GOPATH=~/.gopath
