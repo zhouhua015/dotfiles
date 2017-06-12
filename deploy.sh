@@ -30,7 +30,9 @@ for file in ${DOTFILES[@]}; do
     ln -s $DOTFILES_DIR/$file ~/.$file
 done
 
+cp git_diff_wrapper /usr/local/bin/git_diff_wrapper && chmod +x /usr/local/bin/git_diff_wrapper
+
 if [ -f /usr/bin/git ]; then
     git config --global core.excludesfile ~/.gitignore_global
-    git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 fi

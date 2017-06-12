@@ -1,7 +1,10 @@
-source ~/.vimrc
+if has("win32") || has("win64")
+    source ~/_vimrc
+else
+    source ~/.vimrc
+endif
 
-set background=dark
-colorscheme solarized
+colorscheme base16-default-dark
 
 " Fast reload the .vimrc
 map <silent> <leader>ss :source $MYGVIMRC<cr>

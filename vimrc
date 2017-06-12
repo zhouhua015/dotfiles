@@ -2,32 +2,17 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim/
-call vundle#rc()
-
-" alternatively, pass a path where Vundle should install bundles
-"let path = '~/some/path/here'
-"call vundle#rc(path)
+if has("win32") || has("win64")
+    set rtp+=$HOME/vimfiles/bundle/Vundle.vim/
+    let path = '$USERPROFILE/vimfiles/bundle/'
+    call vundle#rc(path)
+else
+    set rtp+=~/.vim/bundle/Vundle.vim/
+    call vundle#rc()
+endif
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
-"" The following are examples of different formats supported.
-"" Keep bundle commands between here and filetype plugin indent on.
-"" scripts on GitHub repos
-" Bundle 'tpope/vim-fugitive'
-" Bundle 'Lokaltog/vim-easymotion'
-" Bundle 'tpope/vim-rails.git'
-"" The sparkup vim script is in a subdirectory of this repo called vim.
-" "" Pass the path to set the runtimepath properly.
-" " Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-" "" scripts from http://vim-scripts.org/vim/scripts.html
-" " Bundle 'L9'
-" " Bundle 'FuzzyFinder'
-" "" scripts not on GitHub
-" " Bundle 'git://git.wincent.com/command-t.git'
-" "" git repos on your local machine (i.e. when working on your own plugin)
-" " Bundle 'file:///home/gmarik/path/to/plugin'
-"
 Plugin 'vim-scripts/bufexplorer.zip'
 Bundle 'vim-scrips/matchit.zip'
 Bundle 'kien/ctrlp.vim'
@@ -47,7 +32,7 @@ Plugin 'OmniSharp/Omnisharp-vim'
 Plugin 'tpope/vim-dispatch'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
-"
+
 Bundle 'vim-scripts/visual_studio.vim'
 
 filetype plugin indent on     " required
@@ -158,14 +143,15 @@ if has("gui_running")
     set guioptions-=T
     set guioptions-=r
     set guioptions-=L
-    set lines=75 columns=120
-    "set lines=75
+    set guioptions-=m
     if has("win32") || has("win64")
-        set gfn=Lucida\ Console:h10
+        set gfn=Consolas:h10
     elseif has("unix")
         let s:uname = system("uname -s")
         if s:uname == "Linux"
             set gfn=Monospace:h10
+            set background=dark
+            colorscheme solarized
         endif
     else
         set gfn=Monaco:h12
@@ -215,9 +201,9 @@ set lbr "no new line before one word is finished
 " Set auto indent, smart indent, wrap lines
 set ai si wrap
 
-set textwidth=100
+set textwidth=80
 set formatoptions=qrn1  " Actually, I don't know the exactly meaning of this
-set colorcolumn=100      " Show a colored column at 80 characters 
+set colorcolumn=80      " Show a colored column at 80 characters 
 
 
 """"""""""""""""""""""""""""""
@@ -464,18 +450,6 @@ inoremap <C-P>   <C-X><C-P>
 let g:SuperTabDefaultCompletionType="context"
 
 
-"""""""""""""""""""""""""""""""""""""""""
-" OmniCppComplete
-"""""""""""""""""""""""""""""""""""""""""
-" Short-key for make tags for cpp file
-set completeopt=longest,menu
-"map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q<cr>
-set completeopt=longest,menu
-
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-
-
 """"""""""""""""""""""""""""""
 " => Python section
 " """"""""""""""""""""""""""""""
@@ -558,9 +532,6 @@ endif
 " Cscope setting
 " """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if has("cscope")
-    if has("win32") || has("win64")
-        set csprg=C:\Tools\cscope\cscope.exe
-    endif
     set csto=1
     set cst
     set nocsverb
@@ -684,10 +655,127 @@ let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 
 
 """"""""""""""""""""""""""""""""""""""
+" Omnisharp-vim setting
+""""""""""""""""""""""""""""""""""""""
+"This is the default value, setting it isn't actually necessary
+let g:OmniSharp_host = "http://localhost:2000"
+
+"Set the type lookup function to use the preview window instead of the status line
+" let g:OmniSharp_typeLookupInPreview = 1
+
+"Timeout in seconds to wait for a response from the server
+let g:OmniSharp_timeout = 1
+
+"Showmatch significantly slows down omnicomplete
+"when the first match contains parentheses.
+set noshowmatch
+
+"Super tab settings - uncomment the next 4 lines
+"let g:SuperTabDefaultCompletionType = 'context'
+"let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
+"let g:SuperTabDefaultCompletionTypeDiscovery = ["&omnifunc:<c-x><c-o>","&completefunc:<c-x><c-n>"]
+"let g:SuperTabClosePreviewOnPopupClose = 1
+
+"don't autoselect first item in omnicomplete, show if only one item (for preview)
+"remove preview if you don't want to see any documentation whatsoever.
+set completeopt=longest,menu
+" Fetch full documentation during omnicomplete requests.
+" There is a performance penalty with this (especially on Mono)
+" By default, only Type/Method signatures are fetched. Full documentation can still be fetched when
+" you need it with the :OmniSharpDocumentation command.
+" let g:omnicomplete_fetch_documentation=1
+
+"Move the preview window (code documentation) to the bottom of the screen, so it doesn't move the code!
+"You might also want to look at the echodoc plugin
+set splitbelow
+
+" Get Code Issues and syntax errors
+" let g:syntastic_cs_checkers = ['syntax', 'semantic', 'issues']
+
+" Use omnisharp-roslyn backend
+" let g:OmniSharp_server_type = 'roslyn'
+" If you are using the omnisharp-roslyn backend, use the following
+" let g:syntastic_cs_checkers = ['code_checker']
+
+augroup omnisharp_commands
+    autocmd!
+
+    "Set autocomplete function to OmniSharp (if not using YouCompleteMe completion plugin)
+    autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
+
+    " Synchronous build (blocks Vim)
+    "autocmd FileType cs nnoremap <F5> :wa!<cr>:OmniSharpBuild<cr>
+    " Builds can also run asynchronously with vim-dispatch installed
+    autocmd FileType cs nnoremap <leader>b :wa!<cr>:OmniSharpBuildAsync<cr>
+    " automatic syntax check on events (TextChanged requires Vim 7.4)
+    autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+
+    " Automatically add new cs files to the nearest project on save
+    autocmd BufWritePost *.cs call OmniSharp#AddToProject()
+
+    "show type information automatically when the cursor stops moving
+    " autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+
+    "The following commands are contextual, based on the current cursor position.
+
+    autocmd FileType cs nnoremap gd :OmniSharpGotoDefinition<cr>
+    autocmd FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<cr>
+    autocmd FileType cs nnoremap <leader>ft :OmniSharpFindType<cr>
+    autocmd FileType cs nnoremap <leader>fs :OmniSharpFindSymbol<cr>
+    autocmd FileType cs nnoremap <leader>fu :OmniSharpFindUsages<cr>
+    autocmd FileType cs "finds members in the current buffer
+    autocmd FileType cs nnoremap <leader>fm :OmniSharpFindMembers<cr>
+    " cursor can be anywhere on the line containing an issue
+    autocmd FileType cs nnoremap <leader>x  :OmniSharpFixIssue<cr>
+    autocmd FileType cs nnoremap <leader>fx :OmniSharpFixUsings<cr>
+    autocmd FileType cs nnoremap <leader>tt :OmniSharpTypeLookup<cr>
+    autocmd FileType cs nnoremap <leader>dc :OmniSharpDocumentation<cr>
+    "navigate up by method/property/field
+    autocmd FileType cs nnoremap <C-K> :OmniSharpNavigateUp<cr>
+    "navigate down by method/property/field
+    autocmd FileType cs nnoremap <C-J> :OmniSharpNavigateDown<cr>
+    
+augroup END
+
+
+" this setting controls how long to wait (in ms) before fetching type / symbol information.
+set updatetime=500
+" Remove 'Press Enter to continue' message when type information is longer than one line.
+" set cmdheight=2
+
+" Contextual code actions (requires CtrlP or unite.vim)
+au FileType cs nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
+" Run code actions with text selected in visual mode to extract method
+au FileType cs vnoremap <leader><space> :call OmniSharp#GetCodeActions('visual')<cr>
+
+" rename with dialog
+au FileType cs nnoremap <leader>nm :OmniSharpRename<cr>
+au FileType cs nnoremap <F2> :OmniSharpRename<cr>
+" rename without dialog - with cursor on the symbol to rename... ':Rename newname'
+au FileType cs command! -nargs=1 Rename :call OmniSharp#RenameTo("<args>")
+
+" Force OmniSharp to reload the solution. Useful when switching branches etc.
+au FileType cs nnoremap <leader>rl :OmniSharpReloadSolution<cr>
+au FileType cs nnoremap <leader>cf :OmniSharpCodeFormat<cr>
+" Load the current .cs file to the nearest project
+au FileType cs nnoremap <leader>tp :OmniSharpAddToProject<cr>
+
+" (Experimental - uses vim-dispatch or vimproc plugin) - Start the omnisharp server for the current solution
+au FileType cs nnoremap <leader>css :OmniSharpStartServer<cr>
+au FileType cs nnoremap <leader>csp :OmniSharpStopServer<cr>
+
+" Add syntax highlighting for types and interfaces
+au FileType cs nnoremap <leader>th :OmniSharpHighlightTypes<cr>
+
+let g:OmniSharp_selector_ui = 'ctrlp'
+
+
+""""""""""""""""""""""""""""""""""""""
 " Ycm settings
-" """"""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""
 " Add goto for c/cpp files
 autocmd filetype c,cpp nnoremap <leader>gd :YcmCompleter GoTo<CR>
+
 autocmd filetype cs let g:ycm_autoclose_preview_window_after_completion=1
 
 
@@ -705,15 +793,15 @@ let g:UltiSnipsEditSplit="vertical"
 
 """"""""""""""""""""""""""""""""""""""
 " c/cpp settings
-" """"""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""
 " Find corresponding header/source file
 function! SwitchSourceHeader()
-    "update!
-    if (expand ("%:e") == "cpp")
-        find %:t:r.h
-    else
-        find %:t:r.cpp
-    endif
+  "update!
+  if (expand ("%:e") == "cpp") || (expand ("%:e") == "hxx") || (expand ("%:e") == "hpp")
+    find %:t:r.h
+  else
+    find %:t:r.cpp
+  endif
 endfunction
 
 nmap ,s :call SwitchSourceHeader()<CR>
