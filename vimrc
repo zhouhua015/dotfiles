@@ -135,27 +135,12 @@ set encoding=utf8
 set t_Co=256
 
 syntax enable
-" set background=dark
-" colorscheme solarized
-colorscheme base16-default-dark
 
-if has("gui_running")
-    set guioptions-=T
-    set guioptions-=r
-    set guioptions-=L
-    set guioptions-=m
-    if has("win32") || has("win64")
-        set gfn=Consolas:h10
-    elseif has("unix")
-        let s:uname = system("uname -s")
-        if s:uname == "Linux"
-            set gfn=Monospace:h10
-            set background=dark
-            colorscheme solarized
-        endif
-    else
-        set gfn=Monaco:h12
-    endif
+if has("unix")
+    set background=dark
+    colorscheme solarized
+else
+    colorscheme base16-default-dark
 endif
 
 try
