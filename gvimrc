@@ -14,9 +14,9 @@ elseif has("unix")
     let s:uname = system("uname -s")
     if s:uname == "Linux"
         set gfn=Monospace:h10
+    else
+        set gfn=Monaco:h11
     endif
-else
-    set gfn=Monaco:h12
 endif
 
 colorscheme base16-default-dark
