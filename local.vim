@@ -33,7 +33,7 @@ if has('Win32')
                 \"DIRECTORY_1/", 
                 \"DIRECTORY_2/**"]
 else
-    let s:includes=split(system('find . -type f -name "*.h" -printf "%h\n"|sort|uniq'), '\n')
+    let s:includes=split(system('find . -type f -name "*.h" -exec dirname {} \;|sort|uniq'), '\n')
 endif
 
 function! IncludePaths()
