@@ -7,8 +7,9 @@ if has("win32") || has("win64")
     let path = '$USERPROFILE/vimfiles/bundle/'
     call vundle#rc(path)
 else
-    set rtp+=~/.vim/bundle/Vundle.vim/
-    call vundle#rc()
+    set rtp+=$HOME/.vim/bundle/Vundle.vim/
+    let path = '$HOME/.vim/bundle/'
+    call vundle#rc(path)
 endif
 
 " let Vundle manage Vundle, required
