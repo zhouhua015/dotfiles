@@ -137,11 +137,13 @@ set t_Co=256
 
 syntax enable
 
-if has("unix")
-    set background=dark
-    colorscheme solarized
-else
-    colorscheme base16-default-dark
+if !has("gui_running")
+    if has("unix")
+        set background=dark
+        colorscheme solarized
+    else
+        colorscheme base16-default-dark
+    endif
 endif
 
 try
@@ -504,7 +506,7 @@ if !has("win32") && !has("win64")
                 \ 2: ['.hg', 'hg --cwd %s locate -I .'],
                 \ },
                 \ 'fallback': 'find %s -type f',
-                \ 'ignore': 1
+                \ 'ignore': 1,
                 \ }
 endif
 
