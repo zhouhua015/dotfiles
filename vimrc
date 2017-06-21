@@ -495,6 +495,9 @@ map <silent> <F9> :TagbarToggle<cr>
 """"""""""""""""""""""""""""""""""""""
 let g:ctrlp_map='<c-p>'
 let g:ctrlp_regexp = 1          " Use regexp search
+let g:ctrlp_use_caching = 1
+let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_cache_dir = getcwd() .'/.cache/ctrlp'
 
 " These 2 options are not used when g:ctrlp_user_command defined
 "set wildignore+='*/.git/*,*/.hg/*,*/.svn/*'
@@ -506,7 +509,16 @@ if !has("win32") && !has("win64")
                 \ 2: ['.hg', 'hg --cwd %s locate -I .'],
                 \ },
                 \ 'fallback': 'find %s -type f',
-                \ 'ignore': 1,
+                \ 'ignore': 1
+                \ }
+else
+    let g:ctrlp_user_command = {
+                \ 'types': {
+                \ 1: ['.git', 'cd %s && git ls-files'],
+                \ 2: ['.hg', 'hg --cwd %s locate -I .'],
+                \ },
+                \ 'fallback': 'dir %s /-n /b /s /a-d',
+                \ 'ignore': 1
                 \ }
 endif
 
@@ -519,6 +531,27 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Cscope setting
 " """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! RefreshTags()
+    cs kill 0
+    if has('Win32')
+        let cmd = "update_cscope.bat"
+    else
+        let cmd = "./update_cscope.sh " . getcwd()
+    endif
+
+    echo cmd
+    echo system(cmd)
+    if v:shell_error
+        echohl ErrorMsg | echom 'Failed to run ' . cmd | echohl NONE
+    endif
+
+    if filereadable("cscope.out")
+        cs add cscope.out
+    endif
+endfunction
+
+map <F6> :wa<cr>:call RefreshTags()<cr>
+
 if has("cscope")
     set csto=1
     set cst
@@ -561,14 +594,6 @@ highlight DiffAdd term=reverse cterm=bold ctermbg=green ctermfg=white
 highlight DiffChange term=reverse cterm=bold ctermbg=cyan ctermfg=black
 highlight DiffText term=reverse cterm=bold ctermbg=gray ctermfg=black
 highlight DiffDelete term=reverse cterm=bold ctermbg=red ctermfg=black
-
-
-""""""""""""""""""""""""""""""""
-" Local project settings
-""""""""""""""""""""""""""""""""
-if filereadable("local.vim")
-    source local.vim
-endif
 
 """"""""""""""""""""""""""""""""
 " Go tags settings
@@ -766,6 +791,10 @@ autocmd filetype c,cpp nnoremap <leader>gd :YcmCompleter GoTo<CR>
 
 autocmd filetype cs let g:ycm_autoclose_preview_window_after_completion=1
 
+" Use python3 executable
+let g:ycm_python_binary_path = 'python3'
+let g:ycm_show_diagnostics_ui = 1
+
 
 """"""""""""""""""""""""""""""""""""""
 " ultisnips settings
@@ -793,4 +822,23 @@ function! SwitchSourceHeader()
 endfunction
 
 nmap ,s :call SwitchSourceHeader()<CR>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" Include path function for local.vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! IncludePaths()
+    let curdir = getcwd()
+    for include in g:local_project_includes
+        let curinclude=curdir . '/' . include
+        exec 'set path+=' . curinclude
+    endfor
+endfunction
+
+""""""""""""""""""""""""""""""""
+" Local project settings
+""""""""""""""""""""""""""""""""
+if filereadable("local.vim")
+    source local.vim
+endif
 

@@ -1,5 +1,6 @@
 if has("win32") || has("win64")
     source ~/_vimrc
+    set lines=75 columns=120
 else
     source ~/.vimrc
 endif
