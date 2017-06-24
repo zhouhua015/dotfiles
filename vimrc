@@ -444,12 +444,6 @@ let g:SuperTabDefaultCompletionType="context"
 let python_highlight_all=1
 au FileType python syn keyword pythonDecorator True None False self
 
-if has("win32") || has("win64")
-    au FileType python set tags+="C:\Python27\Lib\python_tags"
-else
-    au FileType python set tags+=/usr/lib/python2.7/python27tags
-endif
-
 au BufNewFile,BufRead *.jinja set syntax=htmljinja
 au BufNewFile,BufRead *.mako set ft=mako
 
@@ -461,6 +455,7 @@ au FileType python map <buffer> <leader>1 /class
 au FileType python map <buffer> <leader>2 /def
 au FileType python map <buffer> <leader>C ?class
 au FileType python map <buffer> <leader>D ?def
+au FileType python set sw=2 sts=2 et
 
 
 """""""""""""""""""""""""""""""""""""""""
@@ -793,7 +788,7 @@ autocmd filetype cs let g:ycm_autoclose_preview_window_after_completion=1
 
 " Use python3 executable
 let g:ycm_python_binary_path = 'python3'
-let g:ycm_show_diagnostics_ui = 1
+" let g:ycm_show_diagnostics_ui = 1
 
 
 """"""""""""""""""""""""""""""""""""""
