@@ -807,13 +807,18 @@ let g:UltiSnipsEditSplit="vertical"
 " c/cpp settings
 """"""""""""""""""""""""""""""""""""""
 " Find corresponding header/source file
+let g:src_suffix="cpp"
 function! SwitchSourceHeader()
-  "update!
-  if (expand ("%:e") == "cpp") || (expand ("%:e") == "hxx") || (expand ("%:e") == "hpp")
-    find %:t:r.h
-  else
-    find %:t:r.cpp
+  let basename=expand("%:t:r")
+  let to=basename . "." . g:src_suffix
+  if  (expand ("%:e") == "c")   ||
+    \ (expand ("%:e") == "cpp") ||
+    \ (expand ("%:e") == "hxx") ||
+    \ (expand ("%:e") == "hpp")
+    let to=basename . '.h'
   endif
+
+  exec 'find ' . to
 endfunction
 
 nmap ,s :call SwitchSourceHeader()<CR>
