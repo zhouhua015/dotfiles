@@ -455,7 +455,7 @@ au FileType python map <buffer> <leader>1 /class
 au FileType python map <buffer> <leader>2 /def
 au FileType python map <buffer> <leader>C ?class
 au FileType python map <buffer> <leader>D ?def
-au FileType python set sw=2 sts=2 et
+au FileType python setlocal sw=2 sts=2 et
 
 
 """""""""""""""""""""""""""""""""""""""""
@@ -490,9 +490,6 @@ map <silent> <F9> :TagbarToggle<cr>
 """"""""""""""""""""""""""""""""""""""
 let g:ctrlp_map='<c-p>'
 let g:ctrlp_regexp = 1          " Use regexp search
-let g:ctrlp_use_caching = 1
-let g:ctrlp_clear_cache_on_exit = 0
-let g:ctrlp_cache_dir = getcwd() .'/.cache/ctrlp'
 
 " These 2 options are not used when g:ctrlp_user_command defined
 "set wildignore+='*/.git/*,*/.hg/*,*/.svn/*'
@@ -647,10 +644,11 @@ au FileType go nmap <Leader>i <Plug>(go-info)
 
 au FileType go nmap <Leader>e <Plug>(go-rename)
 
+" Ask gocode to give complete options for unimported packages
+let g:go_gocode_unimported_packages = 1
+
 " Highlight
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_structs = 1
+let g:go_highlight_types = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 
@@ -658,9 +656,14 @@ let g:go_fmt_command = "goimports"
 let g:go_fmt_fail_silently = 1
 
 " Fix lagging issue while saving
-let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+let g:syntastic_go_checkers = ['golint', 'govet', 'gometalinter']
+let g:syntastic_go_gometalinter_args = ['--disable-all', '--enable=errcheck']
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+let g:go_list_type = "quickfix"
 
+" if has("win32") || has("win64")
+"     let g:go_gocode_socket_type = 'tcp'
+" endif
 
 """"""""""""""""""""""""""""""""""""""
 " Omnisharp-vim setting
@@ -787,9 +790,21 @@ autocmd filetype c,cpp nnoremap <leader>gd :YcmCompleter GoTo<CR>
 autocmd filetype cs let g:ycm_autoclose_preview_window_after_completion=1
 
 " Use python3 executable
-let g:ycm_python_binary_path = 'python3'
+" let g:ycm_python_binary_path = 'python3'
+let g:ycm_server_python_interpreter = 'python3'
 " let g:ycm_show_diagnostics_ui = 1
+" Unlimit the number of diags
+let g:ycm_max_diagnostics_to_display = 0
 
+" let g:ycm_filetype_whitelist = {
+"       \ 'c': 1,
+"       \ 'cpp': 1,
+"       \ 'objc': 1,
+"       \ 'objcpp': 1,
+"       \ 'cuda': 1,
+"       \ 'cs': 1,
+"       \ 'java': 1
+"       \}
 
 """"""""""""""""""""""""""""""""""""""
 " ultisnips settings
@@ -823,6 +838,11 @@ endfunction
 
 nmap ,s :call SwitchSourceHeader()<CR>
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" json settings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+au FileType json setlocal tabstop=2
+au FileType json setlocal shiftwidth=2
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Include path function for local.vim
