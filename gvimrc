@@ -16,7 +16,7 @@ elseif has("unix")
     if s:uname == "Linux"
         set gfn=Monospace:h10
     else
-        set gfn=Monaco:h11
+        set gfn=Monaco:h12
     endif
 endif
 

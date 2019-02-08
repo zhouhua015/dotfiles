@@ -34,7 +34,9 @@ Plugin 'tpope/vim-dispatch'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 
-Bundle 'vim-scripts/visual_studio.vim'
+if has("win32") || has("win64")
+    Bundle 'vim-scripts/visual_studio.vim'
+endif
 
 filetype plugin indent on     " required
 " To ignore plugin indent changes, instead use:
@@ -843,6 +845,13 @@ nmap ,s :call SwitchSourceHeader()<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 au FileType json setlocal tabstop=2
 au FileType json setlocal shiftwidth=2
+
+""""""""""""""""""""""""""""""""""""""
+" JSON settings
+""""""""""""""""""""""""""""""""""""""
+autocmd filetype json set shiftwidth=2
+autocmd filetype json set tabstop=2
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Include path function for local.vim

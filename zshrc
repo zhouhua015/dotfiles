@@ -80,24 +80,24 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 export EDITOR='vim'
-export JAVA_HOME=~/Tools/jdk1.7.0_60
+#export JAVA_HOME=~/Tools/jdk1.7.0_60
 
-export LOCAL_MAVEN=/home/zhouhua/Work/polyvirtual/cloudy/release/main/Maven
-export M2=$LOCAL_MAVEN/apache-maven-3.2.1/bin
-export M2_HOME=$LOCAL_MAVEN/apache-maven-3.2.1
-export M2_REPO=$LOCAL_MAVEN/repository
+#export LOCAL_MAVEN=/home/zhouhua/Work/polyvirtual/cloudy/release/main/Maven
+#export M2=$LOCAL_MAVEN/apache-maven-3.2.1/bin
+#export M2_HOME=$LOCAL_MAVEN/apache-maven-3.2.1
+#export M2_REPO=$LOCAL_MAVEN/repository
 
-export PATH=$PATH:$M2
+#export PATH=$PATH:$M2
 
 # Fix the fucking color scheme problem while vim inside tmux
 alias tmux="TERM=screen-256color-bce tmux"
 # source ~/.svnrc
 # source ~/.tmuxinator.zsh
 
-export GOROOT=/usr/lib/go
-export GOPATH=~/.gopath
+#export GOROOT=/usr/lib/go
+export GOPATH=~/Sources/golang
 
-export PATH=$GOPATH/bin:$JAVA_HOME/bin:$PATH
+export PATH=$GOPATH/bin:$PATH
 
 function cfiles {
     find -regextype posix-egrep -regex '.*\.h$|.*\.hpp$|.*\.c$|.*\.cpp|.*\.cc$'
