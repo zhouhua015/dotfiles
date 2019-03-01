@@ -26,9 +26,9 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
 Bundle 'mattn/emmet-vim'
 Bundle 'solarnz/thrift.vim'
+Bundle 'fatih/vim-go'
 Bundle 'Valloric/YouCompleteMe'
 Bundle 'scrooloose/syntastic'
-Bundle 'fatih/vim-go'
 Plugin 'OmniSharp/Omnisharp-vim'
 Plugin 'tpope/vim-dispatch'
 Plugin 'SirVer/ultisnips'
@@ -647,7 +647,7 @@ au FileType go nmap <Leader>i <Plug>(go-info)
 au FileType go nmap <Leader>e <Plug>(go-rename)
 
 " Ask gocode to give complete options for unimported packages
-let g:go_gocode_unimported_packages = 1
+" let g:go_gocode_unimported_packages = 1
 
 " Highlight
 let g:go_highlight_types = 1
