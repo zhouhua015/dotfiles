@@ -10,7 +10,7 @@ set guioptions-=r
 set guioptions-=L
 set guioptions-=m
 if has("win32") || has("win64")
-    set gfn=Consolas:h11
+    set gfn=Consolas:h12
 elseif has("unix")
     let s:uname = system("uname -s")
     if s:uname == "Linux"

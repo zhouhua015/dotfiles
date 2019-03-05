@@ -645,6 +645,9 @@ au FileType go nmap <Leader>s <Plug>(go-implements)
 au FileType go nmap <Leader>i <Plug>(go-info)
 
 au FileType go nmap <Leader>e <Plug>(go-rename)
+au FileType go nmap <Leader>l <Plug>(go-lint)
+au FileType go nmap <Leader>v <Plug>(go-vet)
+au FileType go nmap <Leader>k <Plug>(go-errcheck)
 
 " Ask gocode to give complete options for unimported packages
 " let g:go_gocode_unimported_packages = 1
@@ -658,14 +661,14 @@ let g:go_fmt_command = "goimports"
 let g:go_fmt_fail_silently = 1
 
 " Fix lagging issue while saving
-let g:syntastic_go_checkers = ['golint', 'govet', 'gometalinter']
-let g:syntastic_go_gometalinter_args = ['--disable-all', '--enable=errcheck']
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
-let g:go_list_type = "quickfix"
+" let g:syntastic_go_checkers = ['golint', 'govet', 'gometalinter']
+" let g:syntastic_go_gometalinter_args = ['--disable-all', '--enable=errcheck']
+" let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+" let g:go_list_type = "quickfix"
 
-" if has("win32") || has("win64")
-"     let g:go_gocode_socket_type = 'tcp'
-" endif
+if has("win32") || has("win64")
+    let g:go_gocode_socket_type = 'tcp'
+endif
 
 """"""""""""""""""""""""""""""""""""""
 " Omnisharp-vim setting
