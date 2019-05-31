@@ -1,56 +1,92 @@
 set nocompatible              " be iMproved, required
-filetype off                  " required
 
-" set the runtime path to include Vundle and initialize
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 if has("win32") || has("win64")
-    set rtp+=$HOME/vimfiles/bundle/Vundle.vim/
-    let path = '$USERPROFILE/vimfiles/bundle/'
-    call vundle#rc(path)
+    call plug#begin('~/vimfiles/plugged')
 else
-    set rtp+=$HOME/.vim/bundle/Vundle.vim/
-    let path = '$HOME/.vim/bundle/'
-    call vundle#rc(path)
+    call plug#begin('~/.vim/plugged')
 endif
 
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'vim-scripts/bufexplorer.zip'
-Bundle 'vim-scrips/matchit.zip'
-Bundle 'kien/ctrlp.vim'
-Bundle 'ervandew/supertab'
-Bundle 'majutsushi/tagbar'
-Bundle 'altercation/vim-colors-solarized'
-Plugin 'chriskempson/base16-vim'
-Bundle 'Lokaltog/vim-easymotion'
-Bundle 'tpope/vim-fugitive'
-Bundle 'tpope/vim-surround'
-Bundle 'mattn/emmet-vim'
-Bundle 'solarnz/thrift.vim'
-Bundle 'fatih/vim-go'
-Bundle 'Valloric/YouCompleteMe'
-Bundle 'scrooloose/syntastic'
-Plugin 'OmniSharp/Omnisharp-vim'
-Plugin 'tpope/vim-dispatch'
-Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
+Plug 'junegunn/vim-plug'
+Plug 'vim-scripts/bufexplorer.zip'
+Plug 'vim-scrips/matchit.zip'
+Plug 'kien/ctrlp.vim'
+Plug 'ervandew/supertab'
+Plug 'majutsushi/tagbar'
+Plug 'altercation/vim-colors-solarized'
+Plug 'chriskempson/base16-vim'
+Plug 'Lokaltog/vim-easymotion'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
+Plug 'mattn/emmet-vim'
+Plug 'solarnz/thrift.vim'
+Plug 'fatih/vim-go'
+Plug 'Valloric/YouCompleteMe'
+Plug 'scrooloose/syntastic'
+Plug 'OmniSharp/Omnisharp-vim'
+Plug 'tpope/vim-dispatch'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 
-if has("win32") || has("win64")
-    Bundle 'vim-scripts/visual_studio.vim'
-endif
+call plug#end()
 
-filetype plugin indent on     " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :BundleList          - list configured bundles
-" :BundleInstall(!)    - install (update) bundles
-" :BundleSearch(!) foo - search (or refresh cache first) for foo
-" :BundleClean(!)      - confirm (or auto-approve) removal of unused bundles
-"
-" see :h vundle for more details or wiki for FAQ
-" NOTE: comments after Bundle commands are not allowed.
-" Put your stuff after this line
+"""""""""" Beginning of Vundle.vim plugins configuration 
+" filetype off                  " required
+" " set the runtime path to include Vundle and initialize
+" if has("win32") || has("win64")
+"     set rtp+=$HOME/vimfiles/bundle/Vundle.vim/
+"     let path = '$USERPROFILE/vimfiles/bundle/'
+"     call vundle#rc(path)
+" else
+"     set rtp+=$HOME/.vim/bundle/Vundle.vim/
+"     let path = '$HOME/.vim/bundle/'
+"     call vundle#rc(path)
+" endif
+
+" " let Vundle manage Vundle, required
+" Plugin 'VundleVim/Vundle.vim'
+" Plugin 'vim-scripts/bufexplorer.zip'
+" Bundle 'vim-scrips/matchit.zip'
+" Bundle 'kien/ctrlp.vim'
+" Bundle 'ervandew/supertab'
+" Bundle 'majutsushi/tagbar'
+" Bundle 'altercation/vim-colors-solarized'
+" Plugin 'chriskempson/base16-vim'
+" Bundle 'Lokaltog/vim-easymotion'
+" Bundle 'tpope/vim-fugitive'
+" Bundle 'tpope/vim-surround'
+" Bundle 'mattn/emmet-vim'
+" Bundle 'solarnz/thrift.vim'
+" Bundle 'fatih/vim-go'
+" Bundle 'Valloric/YouCompleteMe'
+" Bundle 'scrooloose/syntastic'
+" Plugin 'OmniSharp/Omnisharp-vim'
+" Plugin 'tpope/vim-dispatch'
+" Plugin 'SirVer/ultisnips'
+" Plugin 'honza/vim-snippets'
+" 
+" if has("win32") || has("win64")
+"     Bundle 'vim-scripts/visual_studio.vim'
+" endif
+" 
+" filetype plugin indent on     " required
+" " To ignore plugin indent changes, instead use:
+" "filetype plugin on
+" "
+" " Brief help
+" " :BundleList          - list configured bundles
+" " :BundleInstall(!)    - install (update) bundles
+" " :BundleSearch(!) foo - search (or refresh cache first) for foo
+" " :BundleClean(!)      - confirm (or auto-approve) removal of unused bundles
+" "
+" " see :h vundle for more details or wiki for FAQ
+" " NOTE: comments after Bundle commands are not allowed.
+" " Put your stuff after this line
 
 """""""""""""""""""""""""""""""""""""""""""""""""
 " ===>> General
