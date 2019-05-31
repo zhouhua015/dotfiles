@@ -484,7 +484,7 @@ au BufNewFile,BufRead *.html set filetype=htmldjango
 let g:tagbar_autoclose=1
 let g:tagbar_autofocus=1
 " Short-key for flip tags list open/close, not useful when using winmanager
-map <silent> <F9> :TagbarToggle<cr>
+au FileType c,cpp,python map <silent> <F9> :TagbarToggle<cr>
 
 
 """"""""""""""""""""""""""""""""""""""
@@ -651,6 +651,10 @@ au FileType go nmap <Leader>k <Plug>(go-errcheck)
 
 " Ask gocode to give complete options for unimported packages
 " let g:go_gocode_unimported_packages = 1
+
+" Use gopls 
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
 
 " Highlight
 let g:go_highlight_types = 1
