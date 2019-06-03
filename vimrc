@@ -1,5 +1,7 @@
 set nocompatible              " be iMproved, required
 
+let g:ale_completion_enabled = 1
+
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -32,6 +34,8 @@ Plug 'OmniSharp/Omnisharp-vim'
 Plug 'tpope/vim-dispatch'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+Plug 'w0rp/ale'
+Plug 'leafgarland/typescript-vim'
 
 call plug#end()
 
