@@ -893,13 +893,6 @@ nmap ,s :call SwitchSourceHeader()<CR>
 au FileType json setlocal tabstop=2
 au FileType json setlocal shiftwidth=2
 
-""""""""""""""""""""""""""""""""""""""
-" JSON settings
-""""""""""""""""""""""""""""""""""""""
-autocmd filetype json set shiftwidth=2
-autocmd filetype json set tabstop=2
-
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Include path function for local.vim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
