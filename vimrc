@@ -18,7 +18,7 @@ call plug#begin('~/' . s:vim_dir . '/plugged')
 
 Plug 'junegunn/vim-plug'
 Plug 'vim-scripts/bufexplorer.zip'
-Plug 'vim-scrips/matchit.zip'
+Plug 'vim-scripts/matchit.zip'
 Plug 'kien/ctrlp.vim'
 Plug 'ervandew/supertab'
 Plug 'majutsushi/tagbar'
@@ -28,16 +28,16 @@ Plug 'Lokaltog/vim-easymotion'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'mattn/emmet-vim'
-Plug 'solarnz/thrift.vim'
-Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plug 'solarnz/thrift.vim', { 'for': 'thrift' }
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries', 'for': 'go' }
 Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer' }
 Plug 'scrooloose/syntastic'
-Plug 'OmniSharp/Omnisharp-vim'
+Plug 'OmniSharp/Omnisharp-vim', { 'for': 'cs'}
 Plug 'tpope/vim-dispatch'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'w0rp/ale'
-Plug 'leafgarland/typescript-vim'
+Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 
 call plug#end()
 
