@@ -2,17 +2,19 @@ set nocompatible              " be iMproved, required
 
 let g:ale_completion_enabled = 1
 
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+if has("win32") || has("win64")
+    let s:vim_dir = 'vimfiles'
+else
+    let s:vim_dir = '.vim'
+endif
+
+if empty(glob('~/' . s:vim_dir . '/autoload/plug.vim'))
+  silent !curl -fLo '~/' .s:vim_dir '/autoload/plug.vim' --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-if has("win32") || has("win64")
-    call plug#begin('~/vimfiles/plugged')
-else
-    call plug#begin('~/.vim/plugged')
-endif
+call plug#begin('~/' . s:vim_dir . '/plugged')
 
 Plug 'junegunn/vim-plug'
 Plug 'vim-scripts/bufexplorer.zip'
@@ -27,8 +29,8 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'mattn/emmet-vim'
 Plug 'solarnz/thrift.vim'
-Plug 'fatih/vim-go'
-Plug 'Valloric/YouCompleteMe'
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer' }
 Plug 'scrooloose/syntastic'
 Plug 'OmniSharp/Omnisharp-vim'
 Plug 'tpope/vim-dispatch'
