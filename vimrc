@@ -29,15 +29,16 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'mattn/emmet-vim'
 Plug 'solarnz/thrift.vim', { 'for': 'thrift' }
-Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries', 'for': 'go' }
-Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer' }
+Plug 'fatih/vim-go', { 'commit': 'b82f469b1d31e6e7468c62708caee196cb1b6b60', 'do': ':GoInstallBinaries' }
+Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer --go-completer' }
 Plug 'scrooloose/syntastic'
-Plug 'OmniSharp/Omnisharp-vim', { 'for': 'cs'}
+Plug 'OmniSharp/Omnisharp-vim'
 Plug 'tpope/vim-dispatch'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'w0rp/ale'
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
+Plug 'posva/vim-vue', { 'for': 'vue' }
 
 call plug#end()
 
@@ -894,6 +895,13 @@ nmap ,s :call SwitchSourceHeader()<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 au FileType json setlocal tabstop=2
 au FileType json setlocal shiftwidth=2
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" web development settings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+au FileType javascript,vue,html,scss,css,typescript setlocal ts=2 sw=2
+au FileType vue syntax sync fromstart
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Include path function for local.vim
