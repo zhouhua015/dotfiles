@@ -27,7 +27,7 @@ for file in ${DOTFILES[@]}; do
     fi
 
     echo "Creating symlink to $file in home directory."
-    ln -s $DOTFILES_DIR/$file ~/.$file
+    ln -sf $DOTFILES_DIR/$file ~/.$file
 done
 
 cp git_diff_wrapper /usr/local/bin/git_diff_wrapper && chmod +x /usr/local/bin/git_diff_wrapper
