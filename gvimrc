@@ -1,6 +1,5 @@
 if has("win32") || has("win64")
     source ~/_vimrc
-    set lines=75 columns=120
 else
     source ~/.vimrc
 endif
@@ -11,10 +10,12 @@ set guioptions-=L
 set guioptions-=m
 if has("win32") || has("win64")
     set gfn=Consolas:h12
+    set lines=75 columns=120
 elseif has("unix")
-    let s:uname = system("uname -s")
-    if s:uname == "Linux"
-        set gfn=Monospace:h10
+    let s:uname = substitute(system("uname -s"), '\n', '', 'g')
+    if s:uname ==? "Linux"
+        set gfn=Ubuntu\ Mono\ 13
+        set lines=53 columns=130
     else
         set gfn=Menlo:h13
     endif
