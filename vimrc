@@ -1,6 +1,8 @@
 set nocompatible              " be iMproved, required
 
+" Use ale completion
 let g:ale_completion_enabled = 1
+let g:ale_sign_highlight_linenrs = 1
 
 if has("win32") || has("win64")
     let s:vim_dir = 'vimfiles'
@@ -31,14 +33,15 @@ Plug 'mattn/emmet-vim'
 Plug 'solarnz/thrift.vim', { 'for': 'thrift' }
 Plug 'fatih/vim-go', { 'commit': 'b82f469b1d31e6e7468c62708caee196cb1b6b60', 'do': ':GoInstallBinaries' }
 Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer --go-completer' }
-Plug 'scrooloose/syntastic'
+Plug 'scrooloose/syntastic', { 'for': [ 'c', 'cpp' ] }
 Plug 'OmniSharp/Omnisharp-vim'
 Plug 'tpope/vim-dispatch'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale', { 'for': [ 'typescript', 'go' ] }
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 Plug 'posva/vim-vue', { 'for': 'vue' }
+Plug 'rhysd/vim-clang-format', { 'for': [ 'cpp', 'c' ] }
 
 call plug#end()
 
@@ -182,14 +185,10 @@ set t_Co=256
 
 syntax enable
 
-if !has("gui_running")
-    if has("unix")
-        set background=dark
-        colorscheme solarized
-    else
-        colorscheme base16-default-dark
-    endif
-endif
+" if !has("gui_running")
+"     set background=dark
+"     colorscheme base16-default-dark
+" endif
 
 try
     lang en_US
@@ -696,8 +695,8 @@ au FileType go nmap <Leader>k <Plug>(go-errcheck)
 " let g:go_gocode_unimported_packages = 1
 
 " Use gopls 
-let g:go_def_mode='gopls'
-let g:go_info_mode='gopls'
+let g:go_def_mode='godef'
+" let g:go_info_mode='gopls'
 
 " Highlight
 let g:go_highlight_types = 1
@@ -707,15 +706,29 @@ let g:go_highlight_build_constraints = 1
 let g:go_fmt_command = "goimports"
 let g:go_fmt_fail_silently = 1
 
-" Fix lagging issue while saving
-" let g:syntastic_go_checkers = ['golint', 'govet', 'gometalinter']
-" let g:syntastic_go_gometalinter_args = ['--disable-all', '--enable=errcheck']
-" let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
-" let g:go_list_type = "quickfix"
-
 if has("win32") || has("win64")
     let g:go_gocode_socket_type = 'tcp'
 endif
+
+""""""""""""""""""""""""""""""""""""""
+" ALE 
+""""""""""""""""""""""""""""""""""""""
+
+"
+" go: allow error sign to be working
+" typescript: get rid of default eslint, which cannot recognize class decorators
+let g:ale_linters = { 
+    \ 'go': ['golint', 'govet', 'golangci-lint'],
+    \ 'typescript': ['tslint', 'tsserver', 'xo'],
+\}
+
+let g:ale_go_golangci_lint_options=''
+
+"
+" typescript: lint and prettier while saving
+let g:ale_fixer = { 
+    \ 'typescript': ['tslint', 'prettier'],
+\}
 
 """"""""""""""""""""""""""""""""""""""
 " Omnisharp-vim setting
@@ -837,7 +850,7 @@ let g:OmniSharp_selector_ui = 'ctrlp'
 " Ycm settings
 """"""""""""""""""""""""""""""""""""""
 " Add goto for c/cpp files
-autocmd filetype c,cpp nnoremap <leader>gd :YcmCompleter GoTo<CR>
+autocmd filetype c,cpp nnoremap <buffer> <silent> gd :YcmCompleter GoTo<CR>
 
 autocmd filetype cs let g:ycm_autoclose_preview_window_after_completion=1
 
@@ -879,6 +892,7 @@ function! SwitchSourceHeader()
   let basename=expand("%:t:r")
   let to=basename . "." . g:src_suffix
   if  (expand ("%:e") == "c")   ||
+    \ (expand ("%:e") == "cc") ||
     \ (expand ("%:e") == "cpp") ||
     \ (expand ("%:e") == "hxx") ||
     \ (expand ("%:e") == "hpp")
@@ -903,6 +917,8 @@ au FileType json setlocal shiftwidth=2
 au FileType javascript,vue,html,scss,css,typescript setlocal ts=2 sw=2
 au FileType vue syntax sync fromstart
 
+autocmd FileType javascript,typescript nnoremap gd :ALEGoToDefinition<cr>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Include path function for local.vim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -917,7 +933,18 @@ endfunction
 """"""""""""""""""""""""""""""""
 " Local project settings
 """"""""""""""""""""""""""""""""
-if filereadable("local.vim")
-    source local.vim
+if filereadable(".local.vim")
+    source .local.vim
 endif
 
+if filereadable(expand("~/.vimrc_background"))
+    let base16colorspace=256
+    source ~/.vimrc_background
+endif
+
+
+""""""""""""""""""""""""""""""""
+" clang-format 
+""""""""""""""""""""""""""""""""
+autocmd FileType c,cpp nnoremap <buffer><leader>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp vnoremap <buffer><leader>cf :ClangFormat<CR>
