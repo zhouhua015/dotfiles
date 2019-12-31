@@ -877,7 +877,15 @@ let g:ycm_max_diagnostics_to_display = 0
 " ultisnips settings
 """"""""""""""""""""""""""""""""""""""
 " Trigger configuration
-let g:UltiSnipsExpandTrigger="<c-enter>"
+if has("gui_running")
+    let g:UltiSnipsExpandTrigger="<c-enter>"
+else
+    " Since not all terminal emulators are sending Ctrl-Enter to running
+    " program, use insert mode command map as workaround
+    " inoremap <leader><cr> <C-R>=UltiSnips#ExpandSnippet()<CR>
+    inoremap <leader><tab> <C-R>=UltiSnips#ExpandSnippet()<CR>
+endif
+
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
