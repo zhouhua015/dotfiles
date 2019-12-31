@@ -42,6 +42,7 @@ Plug 'dense-analysis/ale', { 'for': [ 'typescript', 'go' ] }
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 Plug 'posva/vim-vue', { 'for': 'vue' }
 Plug 'rhysd/vim-clang-format', { 'for': [ 'cpp', 'c' ] }
+Plug 'jparise/vim-graphql'
 
 call plug#end()
 
@@ -166,6 +167,7 @@ set mat=2           " How many tenths of a second to blink
 
 set autowrite		" Automatically save before commands like :next and :make
 set hidden          " Hide buffers when they are abandoned
+set nonu
 set relativenumber  " Show relative line number, convenient for movement
 
 set cinoptions=:s,g0,t0,(0,J1
