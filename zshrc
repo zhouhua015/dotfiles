@@ -5,6 +5,7 @@ export ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
+# ZSH_THEME="agnoster"
 ZSH_THEME="robbyrussell"
 
 # Uncomment the following line to use case-sensitive completion.
@@ -51,7 +52,7 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/.bin:/usr/local/bin:$PATH
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -91,12 +92,12 @@ export EDITOR='vim'
 #export PATH=$PATH:$M2
 
 # Fix the fucking color scheme problem while vim inside tmux
-alias tmux="TERM=screen-256color-bce tmux"
+# alias tmux="TERM=screen-256color-bce tmux"
 # source ~/.svnrc
 # source ~/.tmuxinator.zsh
 
 #export GOROOT=/usr/lib/go
-export GOPATH=~/Sources/golang
+export GOPATH=~/golang
 
 export PATH=$GOPATH/bin:$PATH
 
@@ -123,3 +124,14 @@ function hgrep {
 function yank {
     grep "^\s*$@\s" | awk '{print $2}' | sed 's/-\([0-9]*\)-/:\1:/g' | awk -F: '{print $1 " +" $2}' | awk '{print $2 " " $1}' | xargs ${EDITOR:?EDITOR must be set.}
 }
+
+# Base16 Shell
+BASE16_SHELL="$HOME/config/base16-shell/"
+[ -n "$PS1" ] && \
+    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+        eval "$("$BASE16_SHELL/profile_helper.sh")"
+
+# load dircolors
+[ -s "$HOME/.dircolors" ] && eval `dircolors $HOME/.dircolors`
+
+alias gp4="git-p4"
