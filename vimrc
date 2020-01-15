@@ -187,10 +187,10 @@ set t_Co=256
 
 syntax enable
 
-" if !has("gui_running")
-"     set background=dark
-"     colorscheme base16-default-dark
-" endif
+if !has("gui_running")
+    set background=dark
+    colorscheme base16-default-dark
+endif
 
 try
     lang en_US
