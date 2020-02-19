@@ -4,6 +4,8 @@ set nocompatible              " be iMproved, required
 let g:ale_completion_enabled = 1
 let g:ale_sign_highlight_linenrs = 1
 
+" set laststatus=2
+
 if has("win32") || has("win64")
     let s:vim_dir = 'vimfiles'
 else
@@ -33,7 +35,7 @@ Plug 'mattn/emmet-vim'
 Plug 'solarnz/thrift.vim', { 'for': 'thrift' }
 Plug 'fatih/vim-go', { 'commit': 'b82f469b1d31e6e7468c62708caee196cb1b6b60', 'do': ':GoInstallBinaries' }
 Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer --go-completer' }
-Plug 'scrooloose/syntastic', { 'for': [ 'c', 'cpp' ] }
+Plug 'scrooloose/syntastic', { 'for': [ 'c', 'cpp', 'sh' ] }
 Plug 'OmniSharp/Omnisharp-vim'
 Plug 'tpope/vim-dispatch'
 Plug 'SirVer/ultisnips'
@@ -43,6 +45,8 @@ Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 Plug 'posva/vim-vue', { 'for': 'vue' }
 Plug 'rhysd/vim-clang-format', { 'for': [ 'cpp', 'c' ] }
 Plug 'jparise/vim-graphql'
+" Plug 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plug 'tpope/vim-obsession'
 
 call plug#end()
 
@@ -122,7 +126,7 @@ map <silent> <leader>ee :e $MYVIMRC<cr>
 " Fast saving
 map <silent> <leader>w :w!<cr>
 " Fast quiting, with make session to save current workspace
-map <silent> <leader>q :mksession cursession<cr>:q<cr>
+map <silent> <leader>q :mksession<cr>:q<cr>
 
 "when vimrc is writed, reload it
 if has('autocmd')
@@ -396,7 +400,7 @@ set laststatus=2
 
 " Format the statusline, this is fantastic!
 set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y
-set statusline+=%=%c,%l/%L\ %P
+set statusline+=%=%c,%l/%L\ %P\ %{ObsessionStatus()}
 
 function! CurDir()
     let curdir = substitute(getcwd(), '/Users/zhouhua', "~", "g")
@@ -958,3 +962,9 @@ endif
 """"""""""""""""""""""""""""""""
 autocmd FileType c,cpp nnoremap <buffer><leader>cf :<C-u>ClangFormat<CR>
 autocmd FileType c,cpp vnoremap <buffer><leader>cf :ClangFormat<CR>
+
+""""""""""""""""""""""""""""""""
+" shell checker
+""""""""""""""""""""""""""""""""
+let g:syntastic_sh_checkers = [ "shellcheck" ]
+
