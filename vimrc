@@ -534,6 +534,13 @@ let g:tagbar_autofocus=1
 " Short-key for flip tags list open/close, not useful when using winmanager
 au FileType c,cpp,python,go map <silent> <F9> :TagbarToggle<cr>
 
+"""""""""""""""""""""""""""""""""""""""""
+" netrw settings
+"""""""""""""""""""""""""""""""""""""""""
+" let g:netrw_banner=0
+" Show directory structure in current window
+map <silent> <F10> :Rexplore<cr>
+
 
 """"""""""""""""""""""""""""""""""""""
 " Ctrl-P settings
