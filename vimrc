@@ -951,18 +951,6 @@ function! IncludePaths()
     endfor
 endfunction
 
-""""""""""""""""""""""""""""""""
-" Local project settings
-""""""""""""""""""""""""""""""""
-if filereadable(".local.vim")
-    source .local.vim
-endif
-
-if filereadable(expand("~/.vimrc_background"))
-    let base16colorspace=256
-    source ~/.vimrc_background
-endif
-
 
 """"""""""""""""""""""""""""""""
 " clang-format 
@@ -974,4 +962,17 @@ autocmd FileType c,cpp vnoremap <buffer><leader>cf :ClangFormat<CR>
 " shell checker
 """"""""""""""""""""""""""""""""
 let g:syntastic_sh_checkers = [ "shellcheck" ]
+let g:syntastic_sh_shellcheck_args = "-x"
+
+""""""""""""""""""""""""""""""""
+" Local project settings
+""""""""""""""""""""""""""""""""
+if filereadable(".local.vim")
+    source .local.vim
+endif
+
+if filereadable(expand("~/.vimrc_background"))
+    let base16colorspace=256
+    source ~/.vimrc_background
+endif
 
