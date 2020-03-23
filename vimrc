@@ -21,32 +21,49 @@ endif
 call plug#begin('~/' . s:vim_dir . '/plugged')
 
 Plug 'junegunn/vim-plug'
+
 Plug 'vim-scripts/bufexplorer.zip'
 Plug 'vim-scripts/matchit.zip'
 Plug 'kien/ctrlp.vim'
-Plug 'ervandew/supertab'
 Plug 'majutsushi/tagbar'
+Plug 'Lokaltog/vim-easymotion'
+Plug 'tpope/vim-surround'
+
+" git
+Plug 'tpope/vim-fugitive'
+
+" Go
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+
+" C#
+Plug 'OmniSharp/Omnisharp-vim'
+Plug 'scrooloose/syntastic', { 'for': [ 'cs', 'sh' ] }
+
+" Web dev, HTML/CSS auto-expanding
+Plug 'mattn/emmet-vim'
+
+Plug 'honza/vim-snippets'
+Plug 'tpope/vim-obsession'
+
+" Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer --go-completer' }
+" Plug 'ervandew/supertab'
+" Plug 'tpope/vim-dispatch'
+" Plug 'SirVer/ultisnips'
+" Plug 'dense-analysis/ale', { 'for': [ 'typescript', 'go' ] }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Colorschemes
 Plug 'altercation/vim-colors-solarized'
 Plug 'chriskempson/base16-vim'
-Plug 'Lokaltog/vim-easymotion'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-surround'
-Plug 'mattn/emmet-vim'
-Plug 'solarnz/thrift.vim', { 'for': 'thrift' }
-Plug 'fatih/vim-go', { 'commit': 'b82f469b1d31e6e7468c62708caee196cb1b6b60', 'do': ':GoInstallBinaries' }
-Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer --go-completer' }
-Plug 'scrooloose/syntastic', { 'for': [ 'c', 'cpp', 'sh' ] }
-Plug 'OmniSharp/Omnisharp-vim'
-Plug 'tpope/vim-dispatch'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'dense-analysis/ale', { 'for': [ 'typescript', 'go' ] }
+
+" syntax highlighting, indention...
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
+Plug 'solarnz/thrift.vim', { 'for': 'thrift' }
 Plug 'posva/vim-vue', { 'for': 'vue' }
-Plug 'rhysd/vim-clang-format', { 'for': [ 'cpp', 'c' ] }
 Plug 'jparise/vim-graphql'
+Plug 'rhysd/vim-clang-format', { 'for': [ 'cpp', 'c' ] }
+
 " Plug 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
-Plug 'tpope/vim-obsession'
 
 call plug#end()
 
@@ -156,7 +173,6 @@ autocmd WinEnter * set cursorline
 set ttyfast     " Fast terminal connection
 set showcmd		" Show (partial) command in status line.
 set showmatch		" Show matching brackets.
-set cmdheight=1 " The commandbar height
 
 " Set backspace config
 set backspace=eol,start,indent
@@ -408,7 +424,29 @@ set laststatus=2
 
 " Format the statusline, this is fantastic!
 set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y
-set statusline+=%=%c,%l/%L\ %P\ %{ObsessionStatus()}
+
+" Add (Neo)Vim's native statusline support.
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline.
+"set statusline+=\ coc:%{coc#status()}%{get(b:,'coc_current_function','')}
+set statusline+=\ coc:\ %{StatusDiagnostic()}
+
+set statusline+=%=%c,%l/%L\ %P
+" session persistent status
+set statusline+=\ %{ObsessionStatus()}
+
+function! StatusDiagnostic() abort
+    let info = get(b:, 'coc_diagnostic_info', {})
+    if empty(info) | return '' | endif
+    let msgs = []
+    if get(info, 'error', 0)
+        call add(msgs, 'E' . info['error'])
+    endif
+    if get(info, 'warning', 0)
+        call add(msgs, 'W' . info['warning'])
+    endif
+    return join(msgs, ' ') . ' ' . get(g:, 'coc_status', '')
+endfunction
 
 function! CurDir()
     let curdir = substitute(getcwd(), '/Users/zhouhua', "~", "g")
@@ -493,7 +531,147 @@ inoremap <C-P>   <C-X><C-P>
 """""""""""""""""""""""""""""""""""""""""
 " SuperTab
 """""""""""""""""""""""""""""""""""""""""
-let g:SuperTabDefaultCompletionType="context"
+" let g:SuperTabDefaultCompletionType="context"
+
+""""""""""""""""""""""""""""""""""""""""
+" coc.nvim
+""""""""""""""""""""""""""""""""""""""""
+
+let g:coc_global_extensions=[
+    \'coc-tsserver',
+    \'coc-css',
+    \'coc-vetur',
+    \'coc-json',
+    \'coc-yaml',
+    \'coc-gocode',
+    \'coc-clangd',
+    \'coc-cmake',
+    \'coc-highlight',
+    \'coc-omnisharp',
+    \'coc-snippets']
+
+" Give more space for displaying messages.
+set cmdheight=2
+
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
+
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+" set signcolumn=yes
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+            \ pumvisible() ? "\<C-n>" :
+            \ <SID>check_back_space() ? "\<TAB>" :
+            \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+    else
+        call CocAction('doHover')
+    endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+" Formatting selected code.
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+    autocmd!
+    " Setup formatexpr specified filetype(s).
+    autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+    " Update signature help on jump placeholder.
+    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Applying codeAction to the selected region.
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap keys for applying codeAction to the current line.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Introduce function text object
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+
+" Use <TAB> for selections ranges.
+" NOTE: Requires 'textDocument/selectionRange' support from the language server.
+" coc-tsserver, coc-python are the examples of servers that support it.
+nmap <silent> <TAB> <Plug>(coc-range-select)
+xmap <silent> <TAB> <Plug>(coc-range-select)
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+" " Mappings using CoCList:
+" " Show all diagnostics.
+" nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" " Manage extensions.
+" nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" " Show commands.
+" nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" " Find symbol of current document.
+" nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" " Search workspace symbols.
+" nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" " Do default action for next item.
+" nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" " Do default action for previous item.
+" nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" " Resume latest coc list.
+" nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
 
 """"""""""""""""""""""""""""""
@@ -836,7 +1014,7 @@ augroup END
 
 
 " this setting controls how long to wait (in ms) before fetching type / symbol information.
-set updatetime=500
+" set updatetime=500
 " Remove 'Press Enter to continue' message when type information is longer than one line.
 " set cmdheight=2
 
@@ -867,49 +1045,49 @@ au FileType cs nnoremap <leader>th :OmniSharpHighlightTypes<cr>
 let g:OmniSharp_selector_ui = 'ctrlp'
 
 
-""""""""""""""""""""""""""""""""""""""
-" Ycm settings
-""""""""""""""""""""""""""""""""""""""
-" Add goto for c/cpp files
-autocmd filetype c,cpp nnoremap <buffer> <silent> gd :YcmCompleter GoTo<CR>
-
-autocmd filetype cs let g:ycm_autoclose_preview_window_after_completion=1
-
-" Use python3 executable
-" let g:ycm_python_binary_path = 'python3'
-let g:ycm_server_python_interpreter = 'python3'
-" let g:ycm_show_diagnostics_ui = 1
-" Unlimit the number of diags
-let g:ycm_max_diagnostics_to_display = 0
-
-" let g:ycm_filetype_whitelist = {
-"       \ 'c': 1,
-"       \ 'cpp': 1,
-"       \ 'objc': 1,
-"       \ 'objcpp': 1,
-"       \ 'cuda': 1,
-"       \ 'cs': 1,
-"       \ 'java': 1
-"       \}
-
-""""""""""""""""""""""""""""""""""""""
-" ultisnips settings
-""""""""""""""""""""""""""""""""""""""
-" Trigger configuration
-if has("gui_running")
-    let g:UltiSnipsExpandTrigger="<c-enter>"
-else
-    " Since not all terminal emulators are sending Ctrl-Enter to running
-    " program, use insert mode command map as workaround
-    " inoremap <leader><cr> <C-R>=UltiSnips#ExpandSnippet()<CR>
-    inoremap <leader><tab> <C-R>=UltiSnips#ExpandSnippet()<CR>
-endif
-
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
+" """"""""""""""""""""""""""""""""""""""
+" " Ycm settings
+" """"""""""""""""""""""""""""""""""""""
+" " Add goto for c/cpp files
+" autocmd filetype c,cpp nnoremap <buffer> <silent> gd :YcmCompleter GoTo<CR>
+" 
+" autocmd filetype cs let g:ycm_autoclose_preview_window_after_completion=1
+" 
+" " Use python3 executable
+" " let g:ycm_python_binary_path = 'python3'
+" let g:ycm_server_python_interpreter = 'python3'
+" " let g:ycm_show_diagnostics_ui = 1
+" " Unlimit the number of diags
+" let g:ycm_max_diagnostics_to_display = 0
+" 
+" " let g:ycm_filetype_whitelist = {
+" "       \ 'c': 1,
+" "       \ 'cpp': 1,
+" "       \ 'objc': 1,
+" "       \ 'objcpp': 1,
+" "       \ 'cuda': 1,
+" "       \ 'cs': 1,
+" "       \ 'java': 1
+" "       \}
+" 
+" """"""""""""""""""""""""""""""""""""""
+" " ultisnips settings
+" """"""""""""""""""""""""""""""""""""""
+" " Trigger configuration
+" if has("gui_running")
+"     let g:UltiSnipsExpandTrigger="<c-enter>"
+" else
+"     " Since not all terminal emulators are sending Ctrl-Enter to running
+"     " program, use insert mode command map as workaround
+"     " inoremap <leader><cr> <C-R>=UltiSnips#ExpandSnippet()<CR>
+"     inoremap <leader><tab> <C-R>=UltiSnips#ExpandSnippet()<CR>
+" endif
+" 
+" let g:UltiSnipsJumpForwardTrigger="<c-b>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" 
+" " If you want :UltiSnipsEdit to split your window.
+" let g:UltiSnipsEditSplit="vertical"
 
 
 """"""""""""""""""""""""""""""""""""""
@@ -938,6 +1116,7 @@ nmap ,s :call SwitchSourceHeader()<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 au FileType json setlocal tabstop=2
 au FileType json setlocal shiftwidth=2
+au FileType json syntax match Comment +\/\/.\+$+
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
