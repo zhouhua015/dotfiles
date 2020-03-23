@@ -175,6 +175,14 @@ set nonu
 set relativenumber  " Show relative line number, convenient for movement
 
 set cinoptions=:s,g0,t0,(0,J1
+" enable indentation
+set breakindent
+
+" ident by an additional 2 characters on wrapped lines, when line >= 40 characters, put 'showbreak' at start of line
+set breakindentopt=shift:2,min:40,sbr
+
+" append '>>' to indent
+set showbreak=>>  
 
 " No sound on errors
 set noerrorbells
