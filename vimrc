@@ -49,7 +49,7 @@ Plug 'tpope/vim-obsession'
 " Plug 'ervandew/supertab'
 " Plug 'tpope/vim-dispatch'
 " Plug 'SirVer/ultisnips'
-" Plug 'dense-analysis/ale', { 'for': [ 'typescript', 'go' ] }
+Plug 'dense-analysis/ale', { 'for': [ 'typescript', 'go' ] }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Colorschemes
@@ -1125,7 +1125,7 @@ au FileType json syntax match Comment +\/\/.\+$+
 au FileType javascript,vue,html,scss,css,typescript setlocal ts=2 sw=2
 au FileType vue syntax sync fromstart
 
-autocmd FileType javascript,typescript nnoremap gd :ALEGoToDefinition<cr>
+" autocmd FileType javascript,typescript nnoremap gd :ALEGoToDefinition<cr>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Include path function for local.vim
