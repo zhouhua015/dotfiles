@@ -9,7 +9,7 @@ set guioptions-=r
 set guioptions-=L
 set guioptions-=m
 if has("win32") || has("win64")
-    set gfn=Consolas:h12
+    set gfn=Cascadia\ Code:h11:cANSI:qDRAFT
     set lines=75 columns=120
 elseif has("unix")
     let s:uname = substitute(system("uname -s"), '\n', '', 'g')

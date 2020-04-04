@@ -6,6 +6,11 @@ let g:ale_sign_highlight_linenrs = 1
 
 " set laststatus=2
 
+let s:coc_loaded=0
+let s:ycm_loaded=0
+let s:ultisnips_loaded=0
+let s:supertab_loaded=0
+
 if has("win32") || has("win64")
     let s:vim_dir = 'vimfiles'
 else
@@ -37,7 +42,6 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 " C#
 Plug 'OmniSharp/Omnisharp-vim'
-Plug 'scrooloose/syntastic', { 'for': [ 'cs', 'sh' ] }
 
 " Web dev, HTML/CSS auto-expanding
 Plug 'mattn/emmet-vim'
@@ -45,12 +49,24 @@ Plug 'mattn/emmet-vim'
 Plug 'honza/vim-snippets'
 Plug 'tpope/vim-obsession'
 
+" C/CPP
+if has("win32") || has("win64")
+Plug 'scrooloose/syntastic', { 'for': [ 'c', 'cpp', 'cs', 'sh' ] }
+Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clangd-completer --go-completer' }
+let s:ycm_loaded=1
+Plug 'SirVer/ultisnips'
+let s:ultisnips_loaded=1
+Plug 'ervandew/supertab'
+let s:supertab_loaded=1
+else
+Plug 'scrooloose/syntastic', { 'for': [ 'cs', 'sh' ] }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+let s:coc_loaded=1
+endif
 " Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer --go-completer' }
-" Plug 'ervandew/supertab'
 " Plug 'tpope/vim-dispatch'
 " Plug 'SirVer/ultisnips'
 Plug 'dense-analysis/ale', { 'for': [ 'typescript', 'go' ] }
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Colorschemes
 Plug 'altercation/vim-colors-solarized'
@@ -425,11 +441,14 @@ set laststatus=2
 " Format the statusline, this is fantastic!
 set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y
 
-" Add (Neo)Vim's native statusline support.
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline.
-"set statusline+=\ coc:%{coc#status()}%{get(b:,'coc_current_function','')}
-set statusline+=\ coc:\ %{StatusDiagnostic()}
+if s:coc_loaded==1
+    " Add (Neo)Vim's native statusline support.
+    " NOTE: Please see `:h coc-status` for integrations with external plugins
+    " that provide custom statusline: lightline.vim, vim-airline.
+
+    "set statusline+=\ coc:%{coc#status()}%{get(b:,'coc_current_function','')}
+    set statusline+=\ coc:\ %{StatusDiagnostic()}
+endif
 
 set statusline+=%=%c,%l/%L\ %P
 " session persistent status
@@ -531,24 +550,29 @@ inoremap <C-P>   <C-X><C-P>
 """""""""""""""""""""""""""""""""""""""""
 " SuperTab
 """""""""""""""""""""""""""""""""""""""""
-" let g:SuperTabDefaultCompletionType="context"
+if s:supertab_loaded==1
+    let g:SuperTabDefaultCompletionType="context"
+endif
+
 
 """"""""""""""""""""""""""""""""""""""""
 " coc.nvim
 """"""""""""""""""""""""""""""""""""""""
 
+if s:coc_loaded==1
+
 let g:coc_global_extensions=[
-    \'coc-tsserver',
-    \'coc-css',
-    \'coc-vetur',
-    \'coc-json',
-    \'coc-yaml',
-    \'coc-gocode',
-    \'coc-clangd',
-    \'coc-cmake',
-    \'coc-highlight',
-    \'coc-omnisharp',
-    \'coc-snippets']
+            \'coc-tsserver',
+            \'coc-css',
+            \'coc-vetur',
+            \'coc-json',
+            \'coc-yaml',
+            \'coc-clangd',
+            \'coc-gocode',
+            \'coc-cmake',
+            \'coc-highlight',
+            \'coc-omnisharp',
+            \'coc-snippets']
 
 " Give more space for displaying messages.
 set cmdheight=2
@@ -673,6 +697,7 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 " " Resume latest coc list.
 " nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
+endif
 
 """"""""""""""""""""""""""""""
 " => Python section
@@ -1014,9 +1039,9 @@ augroup END
 
 
 " this setting controls how long to wait (in ms) before fetching type / symbol information.
-" set updatetime=500
+set updatetime=500
 " Remove 'Press Enter to continue' message when type information is longer than one line.
-" set cmdheight=2
+set cmdheight=1
 
 " Contextual code actions (requires CtrlP or unite.vim)
 au FileType cs nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
@@ -1045,50 +1070,57 @@ au FileType cs nnoremap <leader>th :OmniSharpHighlightTypes<cr>
 let g:OmniSharp_selector_ui = 'ctrlp'
 
 
-" """"""""""""""""""""""""""""""""""""""
-" " Ycm settings
-" """"""""""""""""""""""""""""""""""""""
-" " Add goto for c/cpp files
-" autocmd filetype c,cpp nnoremap <buffer> <silent> gd :YcmCompleter GoTo<CR>
-" 
-" autocmd filetype cs let g:ycm_autoclose_preview_window_after_completion=1
-" 
-" " Use python3 executable
-" " let g:ycm_python_binary_path = 'python3'
-" let g:ycm_server_python_interpreter = 'python3'
-" " let g:ycm_show_diagnostics_ui = 1
-" " Unlimit the number of diags
-" let g:ycm_max_diagnostics_to_display = 0
-" 
-" " let g:ycm_filetype_whitelist = {
-" "       \ 'c': 1,
-" "       \ 'cpp': 1,
-" "       \ 'objc': 1,
-" "       \ 'objcpp': 1,
-" "       \ 'cuda': 1,
-" "       \ 'cs': 1,
-" "       \ 'java': 1
-" "       \}
-" 
-" """"""""""""""""""""""""""""""""""""""
-" " ultisnips settings
-" """"""""""""""""""""""""""""""""""""""
-" " Trigger configuration
-" if has("gui_running")
-"     let g:UltiSnipsExpandTrigger="<c-enter>"
-" else
-"     " Since not all terminal emulators are sending Ctrl-Enter to running
-"     " program, use insert mode command map as workaround
-"     " inoremap <leader><cr> <C-R>=UltiSnips#ExpandSnippet()<CR>
-"     inoremap <leader><tab> <C-R>=UltiSnips#ExpandSnippet()<CR>
-" endif
-" 
-" let g:UltiSnipsJumpForwardTrigger="<c-b>"
-" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-" 
-" " If you want :UltiSnipsEdit to split your window.
-" let g:UltiSnipsEditSplit="vertical"
+""""""""""""""""""""""""""""""""""""""
+" Ycm settings
+""""""""""""""""""""""""""""""""""""""
+if s:ycm_loaded==1
 
+" Add goto for c/cpp files
+autocmd filetype c,cpp nnoremap <buffer> <silent> gd :YcmCompleter GoTo<CR>
+
+autocmd filetype cs let g:ycm_autoclose_preview_window_after_completion=1
+
+" Use python3 executable
+" let g:ycm_python_binary_path = 'python3'
+let g:ycm_server_python_interpreter = 'python3'
+" let g:ycm_show_diagnostics_ui = 1
+" Unlimit the number of diags
+let g:ycm_max_diagnostics_to_display = 0
+
+" let g:ycm_filetype_whitelist = {
+"       \ 'c': 1,
+"       \ 'cpp': 1,
+"       \ 'objc': 1,
+"       \ 'objcpp': 1,
+"       \ 'cuda': 1,
+"       \ 'cs': 1,
+"       \ 'java': 1
+"       \}
+
+endif
+
+""""""""""""""""""""""""""""""""""""""
+" ultisnips settings
+""""""""""""""""""""""""""""""""""""""
+if s:ultisnips_loaded==1
+
+" Trigger configuration
+if has("gui_running")
+    let g:UltiSnipsExpandTrigger="<c-enter>"
+else
+    " Since not all terminal emulators are sending Ctrl-Enter to running
+    " program, use insert mode command map as workaround
+    " inoremap <leader><cr> <C-R>=UltiSnips#ExpandSnippet()<CR>
+    inoremap <leader><tab> <C-R>=UltiSnips#ExpandSnippet()<CR>
+endif
+
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+
+endif
 
 """"""""""""""""""""""""""""""""""""""
 " c/cpp settings
