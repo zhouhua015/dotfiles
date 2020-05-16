@@ -1,8 +1,5 @@
 set nocompatible              " be iMproved, required
 
-" Use ale completion
-let g:ale_completion_enabled = 1
-let g:ale_sign_highlight_linenrs = 1
 
 " set laststatus=2
 
@@ -49,24 +46,17 @@ Plug 'mattn/emmet-vim'
 Plug 'honza/vim-snippets'
 Plug 'tpope/vim-obsession'
 
-" C/CPP
-if has("win32") || has("win64")
-Plug 'scrooloose/syntastic', { 'for': [ 'c', 'cpp', 'cs', 'sh' ] }
-Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clangd-completer --go-completer' }
+Plug 'scrooloose/syntastic', { 'for': [ 'c', 'cpp', 'cs', 'sh', 'rust' ] }
+Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clangd-completer --go-completer --rust-completer' }
 let s:ycm_loaded=1
+
 Plug 'SirVer/ultisnips'
 let s:ultisnips_loaded=1
-Plug 'ervandew/supertab'
-let s:supertab_loaded=1
-else
-Plug 'scrooloose/syntastic', { 'for': [ 'cs', 'sh' ] }
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-let s:coc_loaded=1
-endif
-" Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clang-completer --go-completer' }
-" Plug 'tpope/vim-dispatch'
-" Plug 'SirVer/ultisnips'
-Plug 'dense-analysis/ale', { 'for': [ 'typescript', 'go' ] }
+
+" Plug 'ervandew/supertab'
+" let s:supertab_loaded=1
+
+Plug 'rust-lang/rust.vim'
 
 " Colorschemes
 Plug 'altercation/vim-colors-solarized'
@@ -77,64 +67,10 @@ Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 Plug 'solarnz/thrift.vim', { 'for': 'thrift' }
 Plug 'posva/vim-vue', { 'for': 'vue' }
 Plug 'jparise/vim-graphql'
+Plug 'cespare/vim-toml'
 Plug 'rhysd/vim-clang-format', { 'for': [ 'cpp', 'c' ] }
 
-" Plug 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
-
 call plug#end()
-
-"""""""""" Beginning of Vundle.vim plugins configuration 
-" filetype off                  " required
-" " set the runtime path to include Vundle and initialize
-" if has("win32") || has("win64")
-"     set rtp+=$HOME/vimfiles/bundle/Vundle.vim/
-"     let path = '$USERPROFILE/vimfiles/bundle/'
-"     call vundle#rc(path)
-" else
-"     set rtp+=$HOME/.vim/bundle/Vundle.vim/
-"     let path = '$HOME/.vim/bundle/'
-"     call vundle#rc(path)
-" endif
-
-" " let Vundle manage Vundle, required
-" Plugin 'VundleVim/Vundle.vim'
-" Plugin 'vim-scripts/bufexplorer.zip'
-" Bundle 'vim-scrips/matchit.zip'
-" Bundle 'kien/ctrlp.vim'
-" Bundle 'ervandew/supertab'
-" Bundle 'majutsushi/tagbar'
-" Bundle 'altercation/vim-colors-solarized'
-" Plugin 'chriskempson/base16-vim'
-" Bundle 'Lokaltog/vim-easymotion'
-" Bundle 'tpope/vim-fugitive'
-" Bundle 'tpope/vim-surround'
-" Bundle 'mattn/emmet-vim'
-" Bundle 'solarnz/thrift.vim'
-" Bundle 'fatih/vim-go'
-" Bundle 'Valloric/YouCompleteMe'
-" Bundle 'scrooloose/syntastic'
-" Plugin 'OmniSharp/Omnisharp-vim'
-" Plugin 'tpope/vim-dispatch'
-" Plugin 'SirVer/ultisnips'
-" Plugin 'honza/vim-snippets'
-" 
-" if has("win32") || has("win64")
-"     Bundle 'vim-scripts/visual_studio.vim'
-" endif
-" 
-" filetype plugin indent on     " required
-" " To ignore plugin indent changes, instead use:
-" "filetype plugin on
-" "
-" " Brief help
-" " :BundleList          - list configured bundles
-" " :BundleInstall(!)    - install (update) bundles
-" " :BundleSearch(!) foo - search (or refresh cache first) for foo
-" " :BundleClean(!)      - confirm (or auto-approve) removal of unused bundles
-" "
-" " see :h vundle for more details or wiki for FAQ
-" " NOTE: comments after Bundle commands are not allowed.
-" " Put your stuff after this line
 
 """""""""""""""""""""""""""""""""""""""""""""""""
 " ===>> General
@@ -569,6 +505,7 @@ let g:coc_global_extensions=[
             \'coc-yaml',
             \'coc-clangd',
             \'coc-gocode',
+            \'coc-rls',
             \'coc-cmake',
             \'coc-highlight',
             \'coc-omnisharp',
@@ -935,26 +872,6 @@ if has("win32") || has("win64")
 endif
 
 """"""""""""""""""""""""""""""""""""""
-" ALE 
-""""""""""""""""""""""""""""""""""""""
-
-"
-" go: allow error sign to be working
-" typescript: get rid of default eslint, which cannot recognize class decorators
-let g:ale_linters = { 
-    \ 'go': ['golint', 'govet', 'golangci-lint'],
-    \ 'typescript': ['tslint', 'tsserver', 'xo'],
-\}
-
-let g:ale_go_golangci_lint_options=''
-
-"
-" typescript: lint and prettier while saving
-let g:ale_fixer = { 
-    \ 'typescript': ['tslint', 'prettier'],
-\}
-
-""""""""""""""""""""""""""""""""""""""
 " Omnisharp-vim setting
 """"""""""""""""""""""""""""""""""""""
 "This is the default value, setting it isn't actually necessary
@@ -1040,8 +957,8 @@ augroup END
 
 " this setting controls how long to wait (in ms) before fetching type / symbol information.
 set updatetime=500
-" Remove 'Press Enter to continue' message when type information is longer than one line.
-set cmdheight=1
+" " Remove 'Press Enter to continue' message when type information is longer than one line.
+" set cmdheight=1
 
 " Contextual code actions (requires CtrlP or unite.vim)
 au FileType cs nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
@@ -1076,7 +993,7 @@ let g:OmniSharp_selector_ui = 'ctrlp'
 if s:ycm_loaded==1
 
 " Add goto for c/cpp files
-autocmd filetype c,cpp nnoremap <buffer> <silent> gd :YcmCompleter GoTo<CR>
+autocmd filetype c,cpp,rust nnoremap <buffer> <silent> gd :YcmCompleter GoTo<CR>
 
 autocmd filetype cs let g:ycm_autoclose_preview_window_after_completion=1
 
@@ -1104,18 +1021,20 @@ endif
 """"""""""""""""""""""""""""""""""""""
 if s:ultisnips_loaded==1
 
-" Trigger configuration
-if has("gui_running")
-    let g:UltiSnipsExpandTrigger="<c-enter>"
-else
-    " Since not all terminal emulators are sending Ctrl-Enter to running
-    " program, use insert mode command map as workaround
-    " inoremap <leader><cr> <C-R>=UltiSnips#ExpandSnippet()<CR>
-    inoremap <leader><tab> <C-R>=UltiSnips#ExpandSnippet()<CR>
-endif
+imap <C-j> <C-R>=UltiSnips#ExpandSnippetOrJump()<CR>
+"inoremap <leader><CR> <C-R>=UltiSnips#ExpandSnippetOrJump()<CR>
+    " " Trigger configuration
+    " if has("gui_running")
+    "     let g:UltiSnipsExpandTrigger="<C-CR>"
+    " else
+    "     " Since not all terminal emulators are sending Ctrl-Enter to running
+    "     " program, use insert mode command map as workaround
+    "     " inoremap <leader><cr> <C-R>=UltiSnips#ExpandSnippet()<CR>
+    "     inoremap <leader><tab> <C-R>=UltiSnips#ExpandSnippet()<CR>
+    " endif
 
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" let g:UltiSnipsJumpForwardTrigger="<c-b>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
@@ -1143,6 +1062,9 @@ endfunction
 
 nmap ,s :call SwitchSourceHeader()<CR>
 
+" " Use coc-clangd method
+" nmap <leader>s :CocCommand clangd.switchSourceHeader<CR>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" json settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1156,8 +1078,6 @@ au FileType json syntax match Comment +\/\/.\+$+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 au FileType javascript,vue,html,scss,css,typescript setlocal ts=2 sw=2
 au FileType vue syntax sync fromstart
-
-" autocmd FileType javascript,typescript nnoremap gd :ALEGoToDefinition<cr>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Include path function for local.vim
@@ -1176,6 +1096,13 @@ endfunction
 """"""""""""""""""""""""""""""""
 autocmd FileType c,cpp nnoremap <buffer><leader>cf :<C-u>ClangFormat<CR>
 autocmd FileType c,cpp vnoremap <buffer><leader>cf :ClangFormat<CR>
+
+
+""""""""""""""""""""""""""""""""
+" rust
+""""""""""""""""""""""""""""""""
+let g:rustfmt_autosave=1
+
 
 """"""""""""""""""""""""""""""""
 " shell checker
