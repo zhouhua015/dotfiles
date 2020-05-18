@@ -168,8 +168,8 @@ set t_Co=256
 syntax enable
 
 if !has("gui_running")
-    set background=dark
-    colorscheme base16-default-dark
+    set background=light
+    colorscheme base16-default-light
 endif
 
 try
@@ -687,7 +687,7 @@ au FileType c,cpp,python,go map <silent> <F9> :TagbarToggle<cr>
 """""""""""""""""""""""""""""""""""""""""
 " let g:netrw_banner=0
 " Show directory structure in current window
-map <silent> <F10> :Rexplore<cr>
+" map <silent> <F10> :Rexplore<cr>
 
 
 """"""""""""""""""""""""""""""""""""""
