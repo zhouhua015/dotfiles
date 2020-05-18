@@ -9,7 +9,7 @@ set guioptions-=r
 set guioptions-=L
 set guioptions-=m
 if has("win32") || has("win64")
-    set gfn=Cascadia\ Code:h11:cANSI:qDRAFT
+    set gfn=Cascadia\ Mono:h10:cANSI:qDRAFT
     set lines=75 columns=120
 elseif has("unix")
     let s:uname = substitute(system("uname -s"), '\n', '', 'g')
@@ -21,7 +21,7 @@ elseif has("unix")
     endif
 endif
 
-colorscheme base16-default-dark
+colorscheme base16-default-light
 
 " Fast reload the .vimrc
 map <silent> <leader>ss :source $MYGVIMRC<cr>
