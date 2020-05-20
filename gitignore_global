@@ -1,3 +1,7 @@
+.vscode/
+
 cscope.*
 tags
+
 local.vim
+Session.vim
