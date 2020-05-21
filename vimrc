@@ -47,7 +47,7 @@ Plug 'honza/vim-snippets'
 Plug 'tpope/vim-obsession'
 
 Plug 'scrooloose/syntastic', { 'for': [ 'c', 'cpp', 'cs', 'sh', 'rust' ] }
-Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clangd-completer --go-completer --rust-completer' }
+Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clangd-completer --go-completer' }
 let s:ycm_loaded=1
 
 Plug 'SirVer/ultisnips'
@@ -998,21 +998,24 @@ autocmd filetype c,cpp,rust nnoremap <buffer> <silent> gd :YcmCompleter GoTo<CR>
 autocmd filetype cs let g:ycm_autoclose_preview_window_after_completion=1
 
 " Use python3 executable
-" let g:ycm_python_binary_path = 'python3'
 let g:ycm_server_python_interpreter = 'python3'
 " let g:ycm_show_diagnostics_ui = 1
+
 " Unlimit the number of diags
 let g:ycm_max_diagnostics_to_display = 0
 
-" let g:ycm_filetype_whitelist = {
-"       \ 'c': 1,
-"       \ 'cpp': 1,
-"       \ 'objc': 1,
-"       \ 'objcpp': 1,
-"       \ 'cuda': 1,
-"       \ 'cs': 1,
-"       \ 'java': 1
-"       \}
+" use rust-analyzer for rust lsp
+let g:ycm_language_server =
+\ [
+\   {
+\     'name': 'rust',
+\     'cmdline': ['rust-analyzer'],
+\     'filetypes': ['rust'],
+\     'project_root_files': ['Cargo.toml']
+\   }
+\ ]
+
+
 
 endif
 
