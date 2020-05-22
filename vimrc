@@ -78,6 +78,8 @@ call plug#end()
 "set how many lines of history VIM has to remember
 set history=700
 
+set updatetime=300
+
 " Load indentation rules and plugins according to the detected filetype.
 if has("autocmd")
     filetype plugin indent on
@@ -513,10 +515,6 @@ let g:coc_global_extensions=[
 
 " Give more space for displaying messages.
 set cmdheight=2
-
-" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
-" delays and poor user experience.
-set updatetime=300
 
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
@@ -955,8 +953,6 @@ augroup omnisharp_commands
 augroup END
 
 
-" this setting controls how long to wait (in ms) before fetching type / symbol information.
-set updatetime=500
 " " Remove 'Press Enter to continue' message when type information is longer than one line.
 " set cmdheight=1
 
@@ -1014,7 +1010,9 @@ let g:ycm_language_server =
 \     'project_root_files': ['Cargo.toml']
 \   }
 \ ]
-
+let g:ycm_auto_hover=''
+nmap <leader>D :YcmShowDetailedDiagnostic<CR>
+nmap <leader>d <plug>(YCMHover)
 
 
 endif
@@ -1063,7 +1061,7 @@ function! SwitchSourceHeader()
   exec 'find ' . to
 endfunction
 
-nmap ,s :call SwitchSourceHeader()<CR>
+autocmd FileType c,cpp nmap ,s :call SwitchSourceHeader()<CR>
 
 " " Use coc-clangd method
 " nmap <leader>s :CocCommand clangd.switchSourceHeader<CR>
