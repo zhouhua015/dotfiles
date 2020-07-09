@@ -46,15 +46,15 @@ Plug 'mattn/emmet-vim'
 Plug 'honza/vim-snippets'
 Plug 'tpope/vim-obsession'
 
-Plug 'scrooloose/syntastic', { 'for': [ 'c', 'cpp', 'cs', 'sh', 'rust' ] }
+Plug 'scrooloose/syntastic'
 Plug 'Valloric/YouCompleteMe', { 'do': 'python3 ./install.py --clangd-completer --go-completer' }
 let s:ycm_loaded=1
 
 Plug 'SirVer/ultisnips'
 let s:ultisnips_loaded=1
 
-" Plug 'ervandew/supertab'
-" let s:supertab_loaded=1
+Plug 'ervandew/supertab'
+let s:supertab_loaded=1
 
 Plug 'rust-lang/rust.vim'
 
@@ -164,16 +164,8 @@ set tm=500
 " Colors and Fonts
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set encoding=utf8
-
 set t_Co=256
-
 syntax enable
-
-if !has("gui_running")
-    set background=light
-    colorscheme base16-default-light
-endif
-
 try
     lang en_US
 catch
@@ -217,9 +209,9 @@ set lbr "no new line before one word is finished
 " Set auto indent, smart indent, wrap lines
 set ai si wrap
 
-set textwidth=80
+set textwidth=100
 set formatoptions=qrn1  " Actually, I don't know the exactly meaning of this
-set colorcolumn=80      " Show a colored column at 80 characters 
+set colorcolumn=100     " Show a colored column at 80 characters 
 
 
 """"""""""""""""""""""""""""""
@@ -678,7 +670,7 @@ au BufNewFile,BufRead *.html set filetype=htmldjango
 let g:tagbar_autoclose=1
 let g:tagbar_autofocus=1
 " Short-key for flip tags list open/close, not useful when using winmanager
-au FileType c,cpp,python,go map <silent> <F9> :TagbarToggle<cr>
+au FileType c,cpp,python,go,rust map <silent> <F9> :TagbarToggle<cr>
 
 """""""""""""""""""""""""""""""""""""""""
 " netrw settings
@@ -1103,6 +1095,7 @@ autocmd FileType c,cpp vnoremap <buffer><leader>cf :ClangFormat<CR>
 " rust
 """"""""""""""""""""""""""""""""
 let g:rustfmt_autosave=1
+autocmd FileType rust noremap <leader><space> :w<cr>:make build<cr>
 
 
 """"""""""""""""""""""""""""""""
