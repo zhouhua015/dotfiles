@@ -14,7 +14,7 @@ fi
 
 
 OLDDIR=~/dotfiles_old
-DOTFILES="zshrc gvimrc vimrc svnrc gitconfig tmux.conf hgrc gitignore_global"
+DOTFILES="zshrc gvimrc vimrc svnrc gitconfig tmux.conf hgrc gitignore_global gitattributes"
 
 echo "Creating $OLDDIR for backup of any existing dotfiles in ~"
 mkdir -p $OLDDIR
@@ -34,4 +34,5 @@ cp git_diff_wrapper /usr/local/bin/git_diff_wrapper && chmod +x /usr/local/bin/g
 
 if [ -f /usr/bin/git ]; then
     git config --global core.excludesfile ~/.gitignore_global
+    git config --global core.attributesfile ~/.gitattributes
 fi
