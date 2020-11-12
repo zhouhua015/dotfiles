@@ -27,3 +27,5 @@
 	whitespace = red reverse
 [diff-so-fancy]
 	stripLeadingSymbols = true
+[pull]
+	rebase = true
