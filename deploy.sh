@@ -36,3 +36,5 @@ if [ -f /usr/bin/git ]; then
     git config --global core.excludesfile ~/.gitignore_global
     git config --global core.attributesfile ~/.gitattributes
 fi
+
+ln -sf $DOTFILES_DIR/nvim/* ~/.config/nvim/
