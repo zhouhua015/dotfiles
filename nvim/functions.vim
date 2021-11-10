@@ -26,6 +26,7 @@ function! <SID>BufcloseCloseIt()
 endfunction
 command! Bclose call <SID>BufcloseCloseIt()
 
+let g:src_suffix = 'cpp'
 function! SwitchSourceHeader()
   let basename=expand("%:t:r")
   let to=basename . "." . g:src_suffix
