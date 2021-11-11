@@ -1,151 +1,103 @@
 local fn = vim.fn
-
-local install_path = fn.stdpath('config')..'/autoload/plug.vim'
+local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
-  plug_bootstrap = fn.system({'curl', '-fLo', install_path, '--create-dirs', 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'})
+    packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
 end
 
-local Plug = fn['plug#']
+vim.cmd [[packadd packer.nvim]]
 
-vim.call('plug#begin', vim.fn.stdpath('config') .. '/plugged')
+require('packer').startup(function(use)
+    use 'wbthomason/packer.nvim'
+    -- use 'vim-scripts/matchit.zip'
+    use 'Lokaltog/vim-easymotion'
+    use 'tpope/vim-surround'
 
-Plug 'junegunn/vim-plug'
+    use {
+        'vim-scripts/bufexplorer.zip',
+        config = function()
+            vim.g.bufExplorerDefaultHelp=0
+            --  Do not show default help
+            vim.g.bufExplorerDefaultHelp=0
+            --  Show relative paths
+            vim.g.bufExplorerShowRelativePath=1
+            --  Sort by the buffer's name.
+            vim.g.bufExplorerSortBy='name'
+            vim.api.nvim_set_keymap('n', '<leader>o', ':BufExplorer<CR>', {})
+        end,
+    }
 
--- lua config helper
-Plug 'nvim-lua/plenary.nvim'
+    -- use {
+    --     'kien/ctrlp.vim',
+    --     config = function()
+    --         vim.g.ctrlp_map = '<c-p>'
+    --         -- Use regexp search
+    --         vim.g.ctrlp_regexp = 1
 
-Plug 'vim-scripts/bufexplorer.zip'
-Plug 'vim-scripts/matchit.zip'
+    --         -- These 2 options are not used when g:ctrlp_user_command defined
+    --         vim.g.ctrlp_user_command = {
+    --             types = {
+    --                 ['1'] = {'.git', 'cd %s && git ls-files'},
+    --                 ['2'] = {'.hg', 'hg --cwd %s locate -I .'},
+    --             },
+    --             fallback = vim.fn.has('win32') == 1 and 'dir %s /-n /b /s /a-d' or 'find %s -type f',
+    --             ignore = 1
+    --         }
+    --     end,
+    -- }
 
-Plug 'kien/ctrlp.vim'
+    use {
+        'majutsushi/tagbar',
+        config = function()
+            vim.g.tagbar_autoclose=1
+            vim.g.tagbar_autofocus=1
+            vim.api.nvim_set_keymap('n', '<F9>', ':TagbarToggle<CR>', { silent = true })
+        end,
+    }
 
-Plug 'majutsushi/tagbar'
-Plug 'Lokaltog/vim-easymotion'
-Plug 'tpope/vim-surround'
+    use {
+        'tpope/vim-obsession',
+        config = function()
+            -- show obsession status
+            vim.opt.statusline:append ' %{ObsessionStatus()}'
+        end,
+    }
 
--- git
-Plug 'tpope/vim-fugitive'
+    -- use {
+    --     'SirVer/ultisnips',
+    --     requires = 'honza/vim-snippets',
+    --     config = function()
+    --         vim.g.UltiSnipsRemoveSelectModeMappings = 0
+    --     end,
+    -- }
 
--- Go
-Plug('fatih/vim-go', { ['do'] = ':GoUpdateBinaries' })
+    use {
+        'NLKNguyen/papercolor-theme',
+        config = function()
+            vim.opt.background='light'
+            vim.cmd('colorscheme PaperColor')
+        end,
+    }
 
--- C#
-Plug 'OmniSharp/Omnisharp-vim'
+    use 'github/copilot.vim'
 
--- Web dev, HTML/CSS auto-expanding
-Plug 'mattn/emmet-vim'
+    use 'cespare/vim-toml'
+    use 'jparise/vim-graphql'
+    use { 'solarnz/thrift.vim', ft = 'thrift' }
+    -- use { 'rhysd/vim-clang-format', ft = { 'cpp', 'c' } }
 
-Plug 'tpope/vim-obsession'
+    require('my.telescope')(use)
+    require('my.git')(use)
+    require('my.treesitter')(use)
+    require('my.lsp').init(use)
+    require('my.nvim-cmp')(use)
 
-Plug 'scrooloose/syntastic'
+    require('my.lang.go')(use)
+    require('my.lang.rust')(use)
+    require('my.lang.sh')(use)
 
-Plug('Valloric/YouCompleteMe', { ['do'] = 'python3 ./install.py --clangd-completer --go-completer' })
+    if packer_bootstrap then
+        require('packer').sync()
+    end
+end)
 
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-
-Plug 'ervandew/supertab'
-
-Plug 'rust-lang/rust.vim'
-
--- Colorschemes
--- Plug 'altercation/vim-colors-solarized'
--- Plug 'chriskempson/base16-vim'
-Plug 'NLKNguyen/papercolor-theme'
-
--- syntax highlighting, indention...
-Plug('leafgarland/typescript-vim', { ['for'] = 'typescript' })
-Plug('solarnz/thrift.vim', { ['for'] = 'thrift' })
-Plug('posva/vim-vue', { ['for'] = 'vue' })
-Plug 'jparise/vim-graphql'
-Plug 'cespare/vim-toml'
-Plug('rhysd/vim-clang-format', { ['for'] = { 'cpp', 'c' } })
-
-Plug 'github/copilot.vim'
-
-vim.call('plug#end')
-
-if plug_bootstrap then
-  vim.cmd('PlugInstall')
-end
-
-return function()
-  require('my.plugins.bufexplorer')
-  require('my.plugins.ctrlp')
-  require('my.plugins.tagbar')
-  require('my.plugins.vimgo')
-  require('my.plugins.omnisharp')
-  require('my.plugins.vimobsession')
-  require('my.plugins.syntastic')
-  require('my.plugins.ycm')
-  require('my.plugins.ultisnips')
-  require('my.plugins.supertab')
-  require('my.plugins.rust')
-  require('my.plugins.papercolor')
-  require('my.plugins.clangformat')
-end
-
--- vim.cmd [[packadd packer.nvim]]
---
--- vim.cmd([[
---   augroup packer_user_config
---     autocmd!
---     autocmd BufWritePost plugins.lua source <afile> | PackerCompile
---   augroup end
--- ]])
---
--- local fn = vim.fn
--- local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
--- if fn.empty(fn.glob(install_path)) > 0 then
---   packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
--- end
---
--- return require('packer').startup(function(use)
---     use 'wbthomason/packer.nvim'
---
---     use 'vim-scripts/bufexplorer.zip'
---     use 'vim-scripts/matchit.zip'
---     use 'kien/ctrlp.vim'
---     use 'majutsushi/tagbar'
---     use 'Lokaltog/vim-easymotion'
---     use 'tpope/vim-surround'
---     -- git
---     use 'tpope/vim-fugitive'
---     -- golang
---     use { 'fatih/vim-go', run = ':GoUpdateBinaries' }
---     -- rust
---     use 'rust-lang/rust.vim'
---     -- C#
---     use 'OmniSharp/Omnisharp-vim'
---     -- Web dev, HTML/CSS auto-expanding
---     use 'mattn/emmet-vim'
---
---     use 'honza/vim-snippets'
---     use 'tpope/vim-obsession'
---
---     use 'scrooloose/syntastic'
---     use { 'Valloric/YouCompleteMe', run = 'python3 ./install.py --clangd-completer --go-completer' }
---
---     use 'SirVer/ultisnips'
---     use 'ervandew/supertab'
---
---     -- Colorschemes
---     use 'altercation/vim-colors-solarized'
---     use 'chriskempson/base16-vim'
---     use 'NLKNguyen/papercolor-theme'
---
---     -- syntax highlighting, indention...
---     use { 'leafgarland/typescript-vim', ft = 'typescript' }
---     use { 'solarnz/thrift.vim', ft = 'thrift' }
---     use { 'posva/vim-vue', ft = 'vue' }
---     use 'jparise/vim-graphql'
---     use 'cespare/vim-toml'
---     use { 'rhysd/vim-clang-format', ft = { 'cpp', 'c' } }
---
---     use 'github/copilot.vim'
---
---     if packer_bootstrap then
---         require('packer').sync()
---     end
--- end)
---
+require('my.lang.cpp')

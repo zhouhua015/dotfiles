@@ -94,9 +94,6 @@ map('i', '<Esc>D', '<left>', { noremap = true })
 -- Close the current buffer without saving
 map('n', '<leader>bd', ':Bclose<CR>', {})
 
--- Switch between .h/.cpp
-vim.cmd('autocmd FileType c,cpp nmap ,s :call SwitchSourceHeader()<CR>')
-
 -- Swap windows
 map('n', '<leader>mw', ':call MarkWindowSwap()<CR>', { silent = true })
 map('n', '<leader>pw', ':call DoWindowSwap()<CR>', { silent = true })
