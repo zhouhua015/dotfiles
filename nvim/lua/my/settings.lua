@@ -89,6 +89,7 @@ o.textwidth=100
 o.formatoptions:append 'qrn1'
 -- Show a colored column at 100 characters
 o.colorcolumn='100'
+o.splitbelow=true
 
 -- Always show the statusline
 o.laststatus=2
