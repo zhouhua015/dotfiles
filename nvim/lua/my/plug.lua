@@ -22,14 +22,6 @@ require('packer').startup(function(use)
     }
 
     use {
-        'tpope/vim-obsession',
-        config = function()
-            -- show obsession status
-            vim.opt.statusline:append ' %{ObsessionStatus()}'
-        end,
-    }
-
-    use {
         'NLKNguyen/papercolor-theme',
         config = function()
             vim.opt.background='light'
