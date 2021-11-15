@@ -56,17 +56,6 @@ map('i', '$q', '\'\'<esc>i', { noremap = true })
 map('i', '$e', '""<esc>i', { noremap = true })
 map('i', '$t', '<><esc>i', { noremap = true })
 
--- cscope
-map('n', '<F6>', ':wa<cr>:call RefreshTags()<CR>', {})
-map('n', '<leader>cfs', ':cs find s <C-R>=expand("<cword>")<CR><CR>', {})
-map('n', '<leader>cfg', ':cs find g <C-R>=expand("<cword>")<CR><CR>', {})
-map('n', '<leader>cfc', ':cs find c <C-R>=expand("<cword>")<CR><CR>', {})
-map('n', '<leader>cft', ':cs find t <C-R>=expand("<cword>")<CR><CR>', {})
-map('n', '<leader>cfe', ':cs find e <C-R>=expand("<cword>")<CR><CR>', {})
-map('n', '<leader>cff', ':cs find f <C-R>=expand("<cfile>")<CR><CR>', {})
-map('n', '<leader>cfi', ':cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>', {})
-map('n', '<leader>cfd', ':cs find d <C-R>=expand("<cword>")<CR><CR>', {})
-
 -- quickfix
 map('n', '<leader><space>', ':w<CR>:make<CR>', {})
 map('n', '<leader>cc', ':botright cope<cr>', {})

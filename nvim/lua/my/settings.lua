@@ -101,22 +101,6 @@ augroup('remove_trailing_white_space_on_save', {
     autocmd('BufWrite', '*', ':call DeleteTrailingWS()'),
 })
 
--- cscope
-if vim.fn.has('cscope') then
-    o.csto = 1
-    o.cst = true
-    o.cst = true
-    o.csverb = false
-    if vim.fn.filereadable('cscope.out') == 1 then
-        -- TODO Fix 'reset' not allowed issue
-        vim.cmd([[
-        cs reset
-        cs add cscope.out
-        ]])
-    end
-    o.csverb = true
-end
-
 -- vimdiff colors
 vim.cmd('highlight DiffAdd term=reverse cterm=bold ctermbg=green ctermfg=white')
 vim.cmd('highlight DiffChange term=reverse cterm=bold ctermbg=cyan ctermfg=black')
