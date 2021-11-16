@@ -42,7 +42,7 @@ o.incsearch=true
 -- Automatically save before commands like :next and :make
 o.autowrite=true
 -- Show relative line number, convenient for movement
-o.number=false
+o.number=true
 o.relativenumber=true
 
 -- Wait 500ms for a mapped sequence to complete
