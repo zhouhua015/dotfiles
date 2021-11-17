@@ -24,7 +24,7 @@ return function(packer)
             cmp.setup {
                 snippet = {
                     expand = function(args)
-                        luasnip.lsp_expand(args.body)
+                        require'snippy'.expand_snippet(args.body)
                     end,
                 },
                 mapping = {
@@ -62,7 +62,7 @@ return function(packer)
                 },
                 sources = cmp.config.sources({
                     { name = 'nvim_lsp' },
-                    { name = 'luasnip' },
+                    { name = 'snippy' },
                 }, {
                     { name = 'buffer' },
                 })
