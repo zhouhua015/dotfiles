@@ -8,7 +8,8 @@ return function(packer)
             local augroup = util.augroup
             local autocmd = util.autocmd
 
-            augroup('gofmt', {
+            -- overwrite the auto-command group in lsp.lua
+            augroup('format_on_save', {
                 -- autocmd('BufNewFile,BufRead', '*.go', 'setlocal noexpandtab tabstop=2 shiftwidth=2'),
                 autocmd('BufWritePre', '*.go', "lua require('go.format').goimport()"),
             })
@@ -19,7 +20,7 @@ return function(packer)
             if not nvim_lsp.golangcilsp then
                 configs.golangcilsp = {
                     default_config = {
-                        cmd = {'golangci-lint'},
+                        cmd = {'golangci-lint-langserver'},
                         root_dir = nvim_lsp.util.root_pattern('.git', 'go.mod'),
                         filetypes = {'go'},
                         init_options = {
@@ -35,8 +36,9 @@ return function(packer)
                 on_attach = require('my.lsp').on_attach,
                 capabilities = capabilities,
             }
-            nvim_lsp['gopls'].setup(cfg)
-            nvim_lsp['golangcilsp'].setup(cfg)
+
+            nvim_lsp.gopls.setup(cfg)
+            nvim_lsp.golangcilsp.setup(cfg)
         end,
     }
 end
