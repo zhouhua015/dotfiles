@@ -52,3 +52,5 @@ require('packer').startup(function(use)
 end)
 
 require('my.lang.cpp')
+require('my.lang.json')
+require('my.lang.python')

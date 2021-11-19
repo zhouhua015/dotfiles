@@ -112,9 +112,3 @@ vim.cmd('highlight DiffDelete term=reverse cterm=bold ctermbg=red ctermfg=black'
 augroup('resize_splits_when_window_resized', {
     autocmd('VimResized', '*', 'exe "normal! \\<c-w>="'),
 })
-
--- TODO replace it with .nvimrc
--- project local settings
-if vim.fn.filereadable('.local.vim') == 1 then
-    vim.cmd('source .local.vim')
-end

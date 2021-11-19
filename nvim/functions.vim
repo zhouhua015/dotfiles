@@ -1,11 +1,3 @@
-function! IncludePaths()
-    let curdir = getcwd()
-    for include in g:local_project_includes
-        let curinclude=curdir . '/' . include
-        exec 'set path+=' . curinclude
-    endfor
-endfunction
-
 function! <SID>BufcloseCloseIt()
    let l:currentBufNum = bufnr("%")
    let l:alternateBufNum = bufnr("#")
@@ -25,21 +17,6 @@ function! <SID>BufcloseCloseIt()
    endif
 endfunction
 command! Bclose call <SID>BufcloseCloseIt()
-
-let g:src_suffix = 'cpp'
-function! SwitchSourceHeader()
-  let basename=expand("%:t:r")
-  let to=basename . "." . g:src_suffix
-  if  (expand ("%:e") == "c")   ||
-    \ (expand ("%:e") == "cc") ||
-    \ (expand ("%:e") == "cpp") ||
-    \ (expand ("%:e") == "hxx") ||
-    \ (expand ("%:e") == "hpp")
-    let to=basename . '.h'
-  endif
-
-  exec 'find ' . to
-endfunction
 
 function! RefreshTags()
     cs kill 0
@@ -82,7 +59,7 @@ function! DoWindowSwap()
     "Switch to dest and shuffle source->dest
     exe curNum . "wincmd w"
     "Hide and open so that we aren't prompted and keep history
-    exe 'hide buf' markedBuf 
+    exe 'hide buf' markedBuf
 endfunction
 
 function! CmdLine(str)

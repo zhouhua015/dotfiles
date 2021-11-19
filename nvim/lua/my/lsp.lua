@@ -65,7 +65,10 @@ function M.on_attach(client, bufnr)
     buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
     buf_set_keymap('n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
     -- buf_set_keymap('n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+
+    -- formatting
     buf_set_keymap('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+    buf_set_keymap('v', '<leader>f', '<cmd>lua vim.lsp.buf.range_formatting()<CR>', opts)
 
     -- Set autocommands conditional on server_capabilities
     if client.resolved_capabilities.document_highlight then
@@ -81,7 +84,7 @@ function M.on_attach(client, bufnr)
 
     -- format_on_save
     augroup('format_on_save', {
-        autocmd('BufWritePre', '<buffer>', ':silent! lua require("lsp_settings").fmt()'),
+        autocmd('BufWritePre', '<buffer>', ':silent! lua vim.lsp.buf.formatting()'),
     })
 end
 
