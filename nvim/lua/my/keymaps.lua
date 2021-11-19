@@ -11,7 +11,6 @@ map('n', '<leader>q', ':mksession!<CR>:qa<CR>', { silent = true })
 
 -- Easier search
 map('n', '<space>', '/', {})
-map('n', '<c-space>', '/', {})
 map('n', '<leader><CR>', ':noh<CR>', { silent = true })
 
 -- Smart way to move between windows
@@ -63,12 +62,12 @@ map('n', '<leader>cn', ':cn<cr>', {})
 map('n', '<leader>cp', ':cp<cr>', {})
 map('n', '<leader>ccl', ':ccl<cr>', {})
 
--- AutoComplete
-map('i', '<C-]>', '<C-X><C-]>', { noremap = true })
-map('i', '<C-F>', '<C-X><C-F>', { noremap = true })
-map('i', '<C-D>', '<C-X><C-D>', { noremap = true })
-map('i', '<C-L>', '<C-X><C-L>', { noremap = true })
-map('i', '<C-P>', '<C-X><C-P>', { noremap = true })
+-- -- AutoComplete
+-- map('i', '<C-]>', '<C-X><C-]>', { noremap = true })
+-- map('i', '<C-F>', '<C-X><C-F>', { noremap = true })
+-- map('i', '<C-D>', '<C-X><C-D>', { noremap = true })
+-- map('i', '<C-L>', '<C-X><C-L>', { noremap = true })
+-- map('i', '<C-P>', '<C-X><C-P>', { noremap = true })
 
 -- Arrow fixing
 map('n', '<Esc>A', '<up>', { noremap = true })

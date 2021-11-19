@@ -54,3 +54,8 @@ end)
 require('my.lang.cpp')
 require('my.lang.json')
 require('my.lang.python')
+
+-- Avoid github copilot key conflicting with nvim-cmp
+vim.api.nvim_set_keymap('i', '<C-L>', 'copilot#Accept("")', { silent = true, script = true, expr = true, nowait = true })
+vim.g['copilot_no_tab_map'] = true
+vim.g['copilot_assume_mapped'] = true
