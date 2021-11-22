@@ -7,7 +7,7 @@ map('n', '<leader>ee', ':e ' .. vim.fn.escape(vim.fn.stdpath('config'), '\\ ') .
 -- Fast saving
 map('n', '<leader>w', ':w!<CR>', { silent = true })
 -- Fast obsession and quiting
-map('n', '<leader>q', ':mksession!<CR>:qa<CR>', { silent = true })
+map('n', '<leader>q', ':qa<CR>', { silent = true })
 
 -- Easier search
 map('n', '<space>', '/', {})

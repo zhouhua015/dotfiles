@@ -8,9 +8,15 @@ vim.cmd [[packadd packer.nvim]]
 
 require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
-    -- use 'vim-scripts/matchit.zip'
     use 'Lokaltog/vim-easymotion'
     use 'tpope/vim-surround'
+    use {
+        'tpope/vim-obsession',
+        config = function()
+            vim.opt.statusline:append ' %{ObsessionStatus()}'
+            vim.api.nvim_set_keymap('n', '<leader>ob', ':Obsession<CR>', { silent = true })
+        end
+    }
 
     use {
         'majutsushi/tagbar',
