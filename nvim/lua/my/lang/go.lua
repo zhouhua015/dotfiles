@@ -15,9 +15,9 @@ return function(packer)
             })
 
             local nvim_lsp = require 'lspconfig'
-            local configs = require 'lspconfig/configs'
+            local configs = require 'lspconfig.configs'
 
-            if not nvim_lsp.golangcilsp then
+            if not configs.golangcilsp then
                 configs.golangcilsp = {
                     default_config = {
                         cmd = {'golangci-lint-langserver'},
