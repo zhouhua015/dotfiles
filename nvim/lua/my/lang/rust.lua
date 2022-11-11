@@ -5,13 +5,11 @@ return function(packer)
         config = function()
             local nvim_lsp = require 'lspconfig'
 
-            local capabilities = vim.lsp.protocol.make_client_capabilities()
-            capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+            local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
             local opts = {
                 tools = {
                     autoSetHints = true,
-                    hover_with_actions = true,
 
                     inlay_hints = {
                         other_hints_prefix = "",
@@ -22,7 +20,13 @@ return function(packer)
 
                 -- all the opts to send to nvim-lspconfig
                 server = {
-                    on_attach = require('my.lsp').on_attach,
+                    on_attach = function(client, bufnr)
+                        -- Hover actions
+                        vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+                        -- Code action groups
+                        vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+                        require('my.lsp').on_attach(client, bufnr)
+                    end,
                     capabilities = capabilities,
                     settings = {
                         ["rust-analyzer"] = {
