@@ -35,8 +35,6 @@ require('packer').startup(function(use)
         end,
     }
 
-    use 'github/copilot.vim'
-
     use 'cespare/vim-toml'
     use 'jparise/vim-graphql'
     use { 'solarnz/thrift.vim', ft = 'thrift' }

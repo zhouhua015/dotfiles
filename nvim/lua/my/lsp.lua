@@ -1,6 +1,12 @@
 local M = {}
 
 function M.init(packer)
+    local opts = { noremap=true, silent=true }
+    vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
+    vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
+    vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
+    vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
+
     packer {
         'neovim/nvim-lspconfig',
         config = function()
@@ -38,51 +44,58 @@ function M.on_attach(client, bufnr)
         timer_interval = 100,
     }, bufnr)
 
-    local util = require('my.util')
-    local set_highlight = util.set_highlight
-    local augroup = util.augroup
-    local autocmd = util.autocmd
-    local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-    local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
-    buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
     -- Mappings.
-    local opts = { noremap=true, silent=true }
-    buf_set_keymap('n', 'ga', '<Cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-    buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-    buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-    buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-    buf_set_keymap('n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-    buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-    buf_set_keymap('n', '[g', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-    buf_set_keymap('n', ']g', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-    buf_set_keymap('n', '<leader>k', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-    buf_set_keymap('n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-    buf_set_keymap('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-    buf_set_keymap('n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-    buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-    buf_set_keymap('n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-    -- buf_set_keymap('n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+    local bufopts = { noremap=true, silent=true, buffer=bufnr }
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+    vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+    vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+    vim.keymap.set('n', '<leader>wl', function()
+      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, bufopts)
+    vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, bufopts)
+    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
+    vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
 
-    -- formatting
-    buf_set_keymap('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
-    buf_set_keymap('v', '<leader>f', '<cmd>lua vim.lsp.buf.range_formatting()<CR>', opts)
+    vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts)
+    vim.keymap.set('v', '<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts)
 
     -- Set autocommands conditional on server_capabilities
-    if client.resolved_capabilities.document_highlight then
-        set_highlight('LspReferenceRead', {cterm='underline', ctermfg=5, gui='underline', guifg='SlateBlue'})
-        set_highlight('LspReferenceText', {cterm='underline', ctermfg=5, gui='underline', guifg='SlateBlue'})
-        set_highlight('LspReferenceWrite', {cterm='underline', ctermfg=5, gui='underline', guifg='SlateBlue'})
-        augroup('lsp_document_highlight', {
-            autocmd('CursorHold', '<buffer>', 'lua vim.lsp.buf.document_highlight()'),
-            autocmd('CursorMoved', '<buffer>', 'lua vim.lsp.buf.clear_references()'),
-            autocmd('CursorHold', '<buffer>', 'lua vim.lsp.diagnostic.show_line_diagnostics()'),
+    if client.server_capabilities.documentHighlightProvider then
+        vim.cmd [[
+            hi! LspReferenceRead cterm='underline' ctermfg=5 gui='underline' guifg='SlateBlue'
+            hi! LspReferenceText cterm='underline' ctermfg=5 gui='underline' guifg='SlateBlue'
+            hi! LspReferenceWrite cterm='underline' ctermfg=5 gui='underline' guifg='SlateBlue'
+          ]]
+        vim.api.nvim_create_augroup('lsp_document_highlight', {
+          clear = false
+        })
+        vim.api.nvim_clear_autocmds({
+          buffer = bufnr,
+          group = 'lsp_document_highlight',
+        })
+        vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+          group = 'lsp_document_highlight',
+          buffer = bufnr,
+          callback = vim.lsp.buf.document_highlight,
+        })
+        vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+          group = 'lsp_document_highlight',
+          buffer = bufnr,
+          callback = vim.lsp.buf.clear_references,
         })
     end
 
     -- format_on_save
+    local util = require('my.util')
+    local augroup = util.augroup
+    local autocmd = util.autocmd
     augroup('format_on_save', {
         autocmd('BufWritePre', '<buffer>', ':silent! lua vim.lsp.buf.formatting()'),
     })
