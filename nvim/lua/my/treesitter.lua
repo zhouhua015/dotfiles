@@ -6,7 +6,7 @@ return function(packer)
       require('nvim-treesitter.configs').setup {
         ensure_installed = 'all',
         highlight = {
-          enable = true,
+          enable = vim.fn.exists('g:vscode') == 0,
         },
         incremental_selection = {
           enable = true,
