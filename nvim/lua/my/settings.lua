@@ -53,7 +53,7 @@ o.encoding='utf8'
 vim.cmd('syntax enable')
 
 -- Enable mouse support
-o.mouse='a'
+o.mouse='i'
 
 -- Turn backup off, using SVN or git, no local backup
 o.backup=false
