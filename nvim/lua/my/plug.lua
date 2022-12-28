@@ -48,13 +48,14 @@ require('packer').startup(function(use)
 
     require('my.lang.go')(use)
     require('my.lang.rust')(use)
-    require('my.lang.sh')(use)
+    -- require('my.lang.sh')(use)
 
     if packer_bootstrap then
         require('packer').sync()
     end
 end)
 
+require('my.lang.bash')
 require('my.lang.cpp')
 require('my.lang.json')
 require('my.lang.python')
