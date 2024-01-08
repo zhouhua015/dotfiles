@@ -28,6 +28,16 @@ require('packer').startup(function(use)
     }
 
     use {
+        'vim-scripts/bufexplorer.zip',
+        config = function()
+            vim.g.bufExplorerDefaultHelp=0
+            vim.g.bufExplorerShowRelativePath=1
+            vim.g.bufExplorerSortBy='name'
+            vim.api.nvim_set_keymap('n', '<leader>o', ':BufExplorer<CR>', { silent = true })
+        end,
+    }
+
+    use {
         'NLKNguyen/papercolor-theme',
         config = function()
             vim.opt.background='light'
