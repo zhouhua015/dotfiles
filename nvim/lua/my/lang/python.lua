@@ -11,3 +11,8 @@ vim.cmd('au FileType python map <buffer> <leader>C ?class')
 vim.cmd('au FileType python map <buffer> <leader>D ?def')
 vim.cmd('au FileType python setlocal sw=2 sts=2 et')
 
+require'lspconfig'.pylsp.setup({
+    on_attach = function(client, bufnr)
+        require('my.lsp').on_attach(client, bufnr)
+    end,
+})

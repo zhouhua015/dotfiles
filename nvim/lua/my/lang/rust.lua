@@ -7,7 +7,8 @@ return function(packer)
 
             local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-            local opts = {
+            local rt = require 'rust-tools'
+            rt.setup({
                 tools = {
                     autoSetHints = true,
 
@@ -37,8 +38,7 @@ return function(packer)
                         }
                     }
                 },
-            }
-            require('rust-tools').setup(opts)
+            })
         end,
     }
 end
