@@ -66,6 +66,8 @@ function M.on_attach(client, bufnr)
     vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts)
     vim.keymap.set('v', '<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts)
 
+    vim.keymap.set('n', '<leader><space>', vim.diagnostic.open_float, bufopts)
+
     -- Set autocommands conditional on server_capabilities
     if client.server_capabilities.documentHighlightProvider then
         vim.cmd [[
@@ -92,12 +94,14 @@ function M.on_attach(client, bufnr)
         })
     end
 
-    -- format_on_save
-    local util = require('my.util')
-    local augroup = util.augroup
-    local autocmd = util.autocmd
-    augroup('format_on_save', {
-        autocmd('BufWritePre', '<buffer>', ':silent! lua vim.lsp.buf.formatting()'),
+    vim.api.nvim_create_autocmd("BufWritePre", {
+        group = vim.api.nvim_create_augroup('FormatOnSave', { clear = true }),
+        pattern = "*",
+        callback = function()
+            vim.lsp.buf.format { bufnr = bufnr }
+            vim.cmd("w")
+        end,
+        desc = 'LSP: Format on Save',
     })
 end
 
