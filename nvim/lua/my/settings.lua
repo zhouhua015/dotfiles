@@ -39,6 +39,8 @@ o.ignorecase=true
 o.smartcase=true
 -- Incremental search
 o.incsearch=true
+-- Automatically load changes outside vim
+o.autoread=true
 -- Automatically save before commands like :next and :make
 o.autowrite=true
 -- Show relative line number, convenient for movement
