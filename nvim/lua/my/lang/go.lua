@@ -8,12 +8,6 @@ return function(packer)
             local augroup = util.augroup
             local autocmd = util.autocmd
 
-            -- overwrite the auto-command group in lsp.lua
-            augroup('format_on_save', {
-                -- autocmd('BufNewFile,BufRead', '*.go', 'setlocal noexpandtab tabstop=2 shiftwidth=2'),
-                autocmd('BufWritePre', '*.go', "lua require('go.format').goimport()"),
-            })
-
             local nvim_lsp = require 'lspconfig'
             local configs = require 'lspconfig.configs'
 
@@ -32,7 +26,15 @@ return function(packer)
 
             local capabilities = require('cmp_nvim_lsp').default_capabilities()
             cfg = {
-                on_attach = require('my.lsp').on_attach,
+                on_attach = function(client, bufnr)
+                    require('my.lsp').on_attach(client, bufnr)
+
+                    -- overwrite the auto-command group in lsp.lua
+                    augroup('format_on_save', {
+                        -- autocmd('BufNewFile,BufRead', '*.go', 'setlocal noexpandtab tabstop=2 shiftwidth=2'),
+                        autocmd('BufWritePre', '*.go', "lua require('go.format').goimports()"),
+                    })
+                end,
                 capabilities = capabilities,
             }
 
