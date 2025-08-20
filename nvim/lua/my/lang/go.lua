@@ -16,9 +16,8 @@ return function(packer)
                     default_config = {
                         cmd = {'golangci-lint-langserver'},
                         root_dir = nvim_lsp.util.root_pattern('.git', 'go.mod'),
-                        filetypes = {'go'},
                         init_options = {
-                            command = { "golangci-lint", "run", "--fast", "--out-format", "json" };
+                            command = { "golangci-lint", "run", "--out-format", "json", "--issues-exit-code=1" };
                         },
                     };
                 }
@@ -39,7 +38,9 @@ return function(packer)
             }
 
             nvim_lsp.gopls.setup(cfg)
-            nvim_lsp.golangcilsp.setup(cfg)
+            nvim_lsp.golangci_lint_ls.setup {
+                filetypes = {'go', 'gomod'}
+            }
         end,
     }
 end
