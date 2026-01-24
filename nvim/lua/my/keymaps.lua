@@ -56,7 +56,7 @@ map('i', '$e', '""<esc>i', { noremap = true })
 map('i', '$t', '<><esc>i', { noremap = true })
 
 -- quickfix
-map('n', '<leader><space>', ':w<CR>:make<CR>', {})
+map('n', '<C-Space>', ':w<CR>:make<CR>', {})
 map('n', '<leader>cc', ':botright cope<cr>', {})
 map('n', '<leader>cn', ':cn<cr>', {})
 map('n', '<leader>cp', ':cp<cr>', {})

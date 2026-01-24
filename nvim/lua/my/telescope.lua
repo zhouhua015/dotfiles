@@ -8,8 +8,8 @@ return function(packer)
         },
         config = function()
             local util = require('my.util')
-            util.noremap('n', '<C-p>', ':Telescope find_files<CR>')
-            -- util.noremap('n', '<leader>o', ':Telescope buffers<CR>')
+            util.noremap('n', '<leader>ff', ':Telescope find_files<CR>')
+            util.noremap('n', '<leader>fb', ':Telescope buffers<CR>')
             util.noremap('n', '<leader>fg', ':Telescope live_grep<CR>')
             util.noremap('n', '<leader>fh', ':Telescope help_tags<CR>')
 
