@@ -99,9 +99,23 @@ o.laststatus=2
 o.statusline='%t[%{strlen(&fenc)?&fenc:\'none\'},%{&ff}]%h%m%r%y'
 o.statusline:append '%=%c,%l/%L %P'
 
+-- Auto-load .nvim.lua
+o.exrc = true
+
 -- Remove trailing white space
-augroup('remove_trailing_white_space_on_save', {
-    autocmd('BufWrite', '*', ':call DeleteTrailingWS()'),
+vim.api.nvim_create_autocmd("BufWritePre", {
+    group = vim.api.nvim_create_augroup('remove_trailing_white_space_on_save', { clear = true }),
+    pattern = "*",
+    callback = function()
+        -- Respect the project-local flag
+        if vim.b.disable_autoformat then
+            return
+        end
+
+        -- Call your existing Vimscript function
+        vim.fn.DeleteTrailingWS()
+    end,
+    desc = 'Remove trailing whitespace unless autoformat is disabled',
 })
 
 -- vimdiff colors

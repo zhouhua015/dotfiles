@@ -98,8 +98,12 @@ function M.on_attach(client, bufnr)
         group = vim.api.nvim_create_augroup('FormatOnSave', { clear = true }),
         pattern = "*",
         callback = function(args)
+            -- Check both buffer and global level for the disable flag
+            if vim.b[args.buf].disable_autoformat or vim.g.disable_autoformat then
+                return
+            end
+
             vim.lsp.buf.format { bufnr = args.buf }
-            vim.cmd("w")
         end,
         desc = 'LSP: Format on Save',
     })
