@@ -8,23 +8,9 @@ return function(packer)
             local augroup = util.augroup
             local autocmd = util.autocmd
 
-            local nvim_lsp = require 'lspconfig'
-            local configs = require 'lspconfig.configs'
-
-            if not configs.golangcilsp then
-                configs.golangcilsp = {
-                    default_config = {
-                        cmd = {'golangci-lint-langserver'},
-                        root_dir = nvim_lsp.util.root_pattern('.git', 'go.mod'),
-                        init_options = {
-                            command = { "golangci-lint", "run", "--out-format", "json", "--issues-exit-code=1" };
-                        },
-                    };
-                }
-            end
-
             local capabilities = require('cmp_nvim_lsp').default_capabilities()
-            cfg = {
+
+            vim.lsp.config('gopls', {
                 on_attach = function(client, bufnr)
                     require('my.lsp').on_attach(client, bufnr)
 
@@ -35,12 +21,10 @@ return function(packer)
                     })
                 end,
                 capabilities = capabilities,
-            }
+            })
 
-            nvim_lsp.gopls.setup(cfg)
-            nvim_lsp.golangci_lint_ls.setup {
-                filetypes = {'go', 'gomod'}
-            }
+            vim.lsp.enable('gopls')
+            vim.lsp.enable('golangci_lint_ls')
         end,
     }
 end

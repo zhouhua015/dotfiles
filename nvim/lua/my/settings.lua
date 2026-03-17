@@ -5,6 +5,10 @@ local autocmd = util.autocmd
 
 vim.g.mapleader=","
 
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+o.termguicolors = true
 -- How many lines of history VIM has to remember
 o.history=700
 o.updatetime=300

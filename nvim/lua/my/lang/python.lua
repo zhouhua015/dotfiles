@@ -12,14 +12,15 @@ vim.cmd('au FileType python map <buffer> <leader>D ?def')
 -- vim.cmd('au FileType python setlocal sw=2 sts=2 et')
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
-require'lspconfig'.pylsp.setup({
+vim.lsp.config('pylsp', {
     on_attach = function(client, bufnr)
         require('my.lsp').on_attach(client, bufnr)
     end,
     capabilities = capabilities,
 })
+vim.lsp.enable('pylsp')
 
-require('lspconfig').ruff.setup({
+vim.lsp.config('ruff', {
     on_attach = function(client, bufnr)
         require('my.lsp').on_attach(client, bufnr)
 
@@ -34,4 +35,4 @@ require('lspconfig').ruff.setup({
     end,
     capabilities = capabilities,
 })
-
+vim.lsp.enable('ruff')

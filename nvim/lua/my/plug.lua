@@ -19,30 +19,18 @@ require('packer').startup(function(use)
     }
 
     use {
-        'majutsushi/tagbar',
-        config = function()
-            vim.g.tagbar_autoclose=1
-            vim.g.tagbar_autofocus=1
-            vim.api.nvim_set_keymap('n', '<F9>', ':TagbarToggle<CR>', { silent = true })
-        end,
-    }
-
-    use {
-        'vim-scripts/bufexplorer.zip',
-        config = function()
-            vim.g.bufExplorerDefaultHelp=0
-            vim.g.bufExplorerShowRelativePath=1
-            vim.g.bufExplorerSortBy='name'
-            vim.api.nvim_set_keymap('n', '<leader>o', ':BufExplorer<CR>', { silent = true })
-        end,
-    }
-
-    use {
         'NLKNguyen/papercolor-theme',
         config = function()
             vim.opt.background='light'
             vim.cmd('colorscheme PaperColor')
         end,
+    }
+
+    use {
+      'nvim-tree/nvim-tree.lua',
+      requires = {
+        'nvim-tree/nvim-web-devicons', -- optional
+      },
     }
 
     use 'cespare/vim-toml'
@@ -57,15 +45,15 @@ require('packer').startup(function(use)
     require('my.nvim-cmp')(use)
 
     require('my.lang.go')(use)
-    require('my.lang.rust')(use)
-    -- require('my.lang.sh')(use)
 
     if packer_bootstrap then
         require('packer').sync()
     end
 end)
 
+require('my.file-explorer')
 require('my.lang.bash')
 require('my.lang.cpp')
 require('my.lang.json')
 require('my.lang.python')
+require('my.lang.typescript')
