@@ -1,0 +1,4 @@
+CompileFlags:
+    Add: [
+        -DGCC_VERSION=130300
+    ]

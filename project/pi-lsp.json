@@ -1,0 +1,5 @@
+{
+  "servers": {
+    "cpp": { "command": "dev-container-clangd", "args": ["--path-mappings",  "/home/zhouhua/work/git-ws/tplatform2.0=/app/tplatform2.0"] }
+  }
+}

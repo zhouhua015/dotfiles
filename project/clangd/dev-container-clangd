@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euo pipefail
+
+for container in talenet-dev talenet-dev-container-2.0; do
+    if /usr/sbin/docker inspect "$container" >/dev/null 2>&1; then
+        exec /usr/sbin/docker exec -u "$(id -u):$(id -g)" -i "$container" /usr/bin/clangd "$@"
+    fi
+done
+
+echo "dev-container-clangd: container not found (tried: talenet-dev, talenet-dev-container-2.0)" >&2
+exit 1
