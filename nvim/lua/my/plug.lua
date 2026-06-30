@@ -44,16 +44,15 @@ require('packer').startup(function(use)
     require('my.lsp').init(use)
     require('my.nvim-cmp')(use)
 
-    require('my.lang.go')(use)
-
     if packer_bootstrap then
         require('packer').sync()
     end
 end)
 
 require('my.file-explorer')
+require('my.lang.go')
 require('my.lang.bash')
 require('my.lang.cpp')
 require('my.lang.json')
 require('my.lang.python')
-require('my.lang.typescript')
+require('my.lang.vue')

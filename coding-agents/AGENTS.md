@@ -14,15 +14,6 @@ When communicating your results back to me, explain what you did and what happen
 Before reporting back to me, if at all possible, verify your own work. Don't just write code and assume it's done. Actually test it using the tools available to you. If possible, run it, check the output, and confirm it does what was asked. If you're building something visual like a web app, view the pages, click through the flows, and check that things render and behave correctly. If you're writing a script, run it against real or representative input and inspect the results. If there are edge cases you can simulate, try them.
 Define finishing criteria for yourself before you start: what does "done" look like for this task? Use that as your checklist before you come back to me. If something fails or looks off, fix it and re-test. Don't just flag it and hand it back. The goal is to keep me out of the loop on iteration. I want to receive finished, working results, not a first draft that needs me to spot-check it. Only come back to me when you've confirmed things work, or when you've genuinely hit a wall that requires my input.
 
-## Chinese Specific Guideline
-
-When you use Chinese, make sure:
-
-1. 使用平实、直接、克制的技术向白话中文，以把事情说明白为首要目标。
-2. 严禁大厂黑话与抽象职场词汇（如赋能、闭环、底座、抓手、下钻、落地等）
-3. 禁用“先说判断”等故作高深的汇报句式或网络梗。
-4. 多用精确的工程术语；从具体事实说起，再作判断。整体气质朴素诚恳，不空谈概念。
-
 ## Working Environment
 
 You are working in WSL, handle it explicitly:
@@ -30,5 +21,3 @@ You are working in WSL, handle it explicitly:
 1. When you run dev-server, `bun run dev`, `vite`, `npm run dev`, `pnpm run dev`, always look for a way to bind the service to `eth0` IP, so it can be accessed from Windows.
 2. Browser is running on Windows, access it using `eth0` IP too, do NOT use `localhost`.
 3. If multiple copies found for a tool, a program, a target, choose the one INSIDE WSL.
-
-For JavaScript, TypeScript & JSX projects, prefer `bun` over `npm`/`pnpm`/`yarn`.

@@ -81,7 +81,7 @@ export LANG=en_US.UTF-8
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-export EDITOR='vim'
+export EDITOR='nvim'
 #export JAVA_HOME=~/Tools/jdk1.7.0_60
 
 #export LOCAL_MAVEN=/home/zhouhua/Work/polyvirtual/cloudy/release/main/Maven
