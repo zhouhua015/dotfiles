@@ -1,0 +1,67 @@
+/**
+ * Pi Notify Extension, adapted from Pi's bundled notify.ts.
+ * In tmux, show live pane status; elsewhere, use terminal notifications.
+ */
+
+import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
+
+function windowsToastScript(title: string, body: string): string {
+	const type = "Windows.UI.Notifications";
+	const mgr = `[${type}.ToastNotificationManager, ${type}, ContentType = WindowsRuntime]`;
+	const template = `[${type}.ToastTemplateType]::ToastText01`;
+	const toast = `[${type}.ToastNotification]::new($xml)`;
+	return [
+		`${mgr} > $null`,
+		`$xml = [${type}.ToastNotificationManager]::GetTemplateContent(${template})`,
+		`$xml.GetElementsByTagName('text')[0].AppendChild($xml.CreateTextNode('${body}')) > $null`,
+		`[${type}.ToastNotificationManager]::CreateToastNotifier('${title}').Show(${toast})`,
+	].join("; ");
+}
+
+function notifyOSC777(title: string, body: string): void {
+	process.stdout.write(`\x1b]777;notify;${title};${body}\x07`);
+}
+
+function notifyOSC99(title: string, body: string): void {
+	// Kitty OSC 99: i=notification id, d=0 means not done yet, p=body for second part
+	process.stdout.write(`\x1b]99;i=1:d=0;${title}\x1b\\`);
+	process.stdout.write(`\x1b]99;i=1:p=body;${body}\x1b\\`);
+}
+
+function notifyWindows(title: string, body: string): void {
+	const { execFile } = require("child_process");
+	execFile("powershell.exe", ["-NoProfile", "-Command", windowsToastScript(title, body)]);
+}
+
+function notify(title: string, body: string): void {
+	if (process.env.WT_SESSION) {
+		notifyWindows(title, body);
+	} else if (process.env.KITTY_WINDOW_ID) {
+		notifyOSC99(title, body);
+	} else {
+		notifyOSC777(title, body);
+	}
+}
+
+export default function (pi: ExtensionAPI) {
+	const pane = process.env.TMUX && process.env.TMUX_PANE;
+	async function setPiStatus(ctx: ExtensionContext, status?: string) {
+		if (!pane || ctx.mode !== "tui") return;
+		const args = status === undefined ? ["-pqu", "-t", pane, "@pi_status"] : ["-pq", "-t", pane, "@pi_status", status];
+		await pi.exec("tmux", ["set-option", ...args], { timeout: 1000 });
+	}
+
+	pi.on("session_start", (_event, ctx) => setPiStatus(ctx, "💤"));
+	pi.on("agent_start", (_event, ctx) => setPiStatus(ctx, "⏳"));
+	pi.on("message_start", async (event, ctx) => {
+		if (event.message.role === "assistant") await setPiStatus(ctx, "⏳");
+	});
+	pi.on("tool_execution_start", (_event, ctx) => setPiStatus(ctx, "🛠️"));
+	pi.on("session_shutdown", (_event, ctx) => setPiStatus(ctx));
+
+	// `agent_end` fires after each low-level run, before retries and queued follow-ups settle.
+	pi.on("agent_settled", async (_event, ctx) => {
+		if (pane) return setPiStatus(ctx, "💤");
+		notify("Pi", "Ready for input");
+	});
+}
